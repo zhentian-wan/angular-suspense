@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ndw-loading-skeleton": {
+    "ngx-loading-skeleton": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {

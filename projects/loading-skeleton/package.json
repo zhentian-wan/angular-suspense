@@ -1,9 +1,27 @@
 {
   "name": "ngx-loading-skeleton",
-  "version": "1.0.0",
+  "version": "1.0.1",
+  "author": {
+    "name": "Zhentian Wan",
+    "email": "answer881215@gmail.com"
+  },
+  "keywords": [
+    "Angular",
+    "Loading",
+    "Spinner",
+    "Skeleton",
+    "Loading-Skeleton",
+    "Content-Skeleton",
+    "ngx-loading",
+    "ngx-skeleton",
+    "ngx-loading-skeleton"
+  ],
+  "description": "Angular 9 Component for displaying loading skeleton for the page, customize just by css",
+  "homepage": "https://github.com/zhentian-wan/ngx-loading-skeleton/blob/master/projects/loading-skeleton/README.md",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",
     "tslib": "^1.10.0"
-  }
+  },
+  "license": "MIT"
 }

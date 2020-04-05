@@ -1,5 +1,5 @@
 {
-  "name": "loading-skeleton",
+  "name": "ngx-loading-skeleton",
   "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^8.2.14",

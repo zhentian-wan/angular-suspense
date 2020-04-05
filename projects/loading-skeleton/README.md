@@ -1,4 +1,4 @@
-# NdwLoadingSkeleton
+# NgxLoadingSkeleton
 
 ## [DEMO](https://codesandbox.io/s/hungry-flower-0jwv5?fontsize=14&hidenavigation=1&theme=dark)
 

@@ -1,0 +1,15 @@
+<section>
+  <div style="display: flex;" *ngFor="let n of repeat(count)">
+    <loading-bullet
+      [theme]="theme"
+      [mode]="mode"
+      *ngIf="bullet"
+    ></loading-bullet>
+    <loading-text
+      [theme]="theme"
+      [mode]="mode"
+      [size]="size ? size : 'm'"
+      style="flex: 1;"
+    ></loading-text>
+  </div>
+</section>

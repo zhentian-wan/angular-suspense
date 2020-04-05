@@ -1,0 +1,23 @@
+.loading-placeholder__text {
+  height: 16px;
+
+  &--small,
+  &--s {
+    width: 25%;
+  }
+
+  &--medium,
+  &--m {
+    width: 50%;
+  }
+
+  &--large,
+  &--l {
+    width: 75%;
+  }
+
+  &--full,
+  &--f {
+    width: 95%;
+  }
+}

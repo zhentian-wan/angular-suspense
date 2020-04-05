@@ -1,0 +1,24 @@
+.loading-placeholder__headline {
+    height: 27px;
+    margin-bottom: 27px;
+
+    &--small,
+    &--s {
+        width: 25%;
+    }
+
+    &--medium,
+    &--m {
+        width: 50%;
+    }
+
+    &--large,
+    &--l {
+        width: 75%;
+    }
+
+    &--full,
+    &--f {
+        width: 100%;
+    }
+}

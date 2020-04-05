@@ -1,0 +1,11 @@
+<div
+  class="loading-placeholder"
+  [ngClass]="extraClass"
+  [style.background-color]="backgroundColor"
+  [style.color]="fontColor"
+>
+  &nbsp;
+  <ng-container *ngIf="loadingService.config.showContent">
+    <ng-content></ng-content>
+  </ng-container>
+</div>

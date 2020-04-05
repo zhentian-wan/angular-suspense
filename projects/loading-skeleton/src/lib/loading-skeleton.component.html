@@ -1,0 +1,19 @@
+<ng-template #defaultPlaceholder>
+  <ng-content></ng-content>
+</ng-template>
+
+<div
+  class="loading-container"
+  *ngIf="(loading$ | async) || isVisible"
+  role="alert"
+  aria-busy="true"
+  aria-hidden="false"
+  [attr.aria-label]="ariaLabel"
+>
+  <ng-container
+    *ngTemplateOutlet="
+      outlet ? outlet : defaultPlaceholder;
+      context: loadingContext
+    "
+  ></ng-container>
+</div>

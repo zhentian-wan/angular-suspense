@@ -48,7 +48,7 @@ It using `this.loadingService.showingFor<T>(obs$ : Observable<T>): Observable: T
   selector: "categories",
   templateUrl: "./categories.component.html",
   styleUrls: ["./categories.component.scss"],
-  providers: [LoadingSkeletonService]
+  providers: [LoadingSkeletonService],
 })
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
@@ -152,7 +152,7 @@ the side effect which control loading spinner ON / OFF.
   selector: "categories",
   templateUrl: "./categories.component.html",
   styleUrls: ["./categories.component.scss"],
-  providers: [LoadingSkeletonService]
+  providers: [LoadingSkeletonService],
 })
 export class CategoriesComponent implements OnInit {
   categories$: Observable<Category[]>;
@@ -203,14 +203,14 @@ imports: [
       // the same as default value
       light: {
         backgroundColor: `rgb(227, 227, 227)`,
-        fontColor: `rgba(0, 0, 0, 0.7)`
+        fontColor: `rgba(0, 0, 0, 0.7)`,
       },
       dark: {
         backgroundColor: `rgba(0, 0, 0, 0.7)`,
-        fontColor: `rgb(227, 227, 227)`
-      }
-    }
-  })
+        fontColor: `rgb(227, 227, 227)`,
+      },
+    },
+  }),
 ];
 ```
 
@@ -219,7 +219,3 @@ imports: [
 It is recommended to inject `LoadingSkeletonService` for `component` level.
 
 The reason is for each page or feature module, we want difference loading skeleton so that users get unqiue experience when browsering the appliation.
-
-## Contact
-
-Zhentian Wan <answer881215@gmail.com>

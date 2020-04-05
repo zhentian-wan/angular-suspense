@@ -1,17 +1,17 @@
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { BrowserModule } from "@angular/platform-browser";
+import { NgModule } from "@angular/core";
 
-import { AppComponent } from './app.component';
-import { CommonModule } from '@angular/common';
-import { NdwLoadingSkeletonModule } from 'projects/loading-skeleton/src/public-api';
+import { AppComponent } from "./app.component";
+import { CommonModule } from "@angular/common";
+import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-api";
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     CommonModule,
-    NdwLoadingSkeletonModule
-    /*LoadingSkeletonModule.forRoot({
+    NgxLoadingSkeletonModule,
+    /*NgxLoadingSkeletonModule.forRoot({
       duration: "2s",
       theme: {
         light: {
@@ -24,6 +24,6 @@ import { NdwLoadingSkeletonModule } from 'projects/loading-skeleton/src/public-a
     })*/
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

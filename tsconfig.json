@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "loading-skeleton": [
+        "dist/loading-skeleton"
+      ],
+      "loading-skeleton/*": [
+        "dist/loading-skeleton/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

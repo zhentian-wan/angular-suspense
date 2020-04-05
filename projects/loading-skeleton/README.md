@@ -222,4 +222,4 @@ The reason is for each page or feature module, we want difference loading skelet
 
 ## Contact
 
-Zhentian Wan <zhentian.wan@nordea.comn>
+Zhentian Wan <answer881215@gmail.com>

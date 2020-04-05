@@ -1,6 +1,6 @@
 {
   "name": "ngx-loading-skeleton",
-  "version": "1.0.0-beta.0",
+  "version": "1.0.0",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",

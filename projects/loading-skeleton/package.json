@@ -23,5 +23,8 @@
     "@angular/core": "^9.1.0",
     "tslib": "^1.10.0"
   },
+  "publishConfig": { 
+    "registry": "https://npm.pkg.github.com/" 
+  },
   "license": "MIT"
 }

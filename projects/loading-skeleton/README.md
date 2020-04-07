@@ -169,6 +169,29 @@ export class CategoriesComponent implements OnInit {
 }
 ```
 
+[Note]: **Some observables will complete automaticlly, some are not.** If you want to use with `router`:
+
+```typescript
+// Bad
+// Following code will not work
+// Because this.router.paramMap will NOT COMPLETE automaticlly
+
+this.loadingService.showingFor(
+  this.router.paramMap.pipe(
+    map(paramMap => paramMap.get('id')),
+    switchMap(id => this.categoriesService.getCategoryById(id))
+  )
+)
+
+// Good
+// Categories Service use http call which will complete automatically
+
+this.router.paramMap.pipe(
+  map(paramMap => paramMap.get('id')),
+  switchMap(id => this.loadingService.showingFor(this.categoriesService.getCategoryById(id)))
+)
+```
+
 #### `show() / hide()`
 
 If you wish to have normal control flow approach. You can use `show / hide`

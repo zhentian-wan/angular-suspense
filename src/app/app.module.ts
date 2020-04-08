@@ -10,18 +10,18 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
   imports: [
     BrowserModule,
     CommonModule,
-    NgxLoadingSkeletonModule,
-    /*NgxLoadingSkeletonModule.forRoot({
-      duration: "2s",
+    // NgxLoadingSkeletonModule,
+    NgxLoadingSkeletonModule.forRoot({
+      animationSpeed: "2s",
       theme: {
         light: {
-          backgroundColor: "pink"
+          backgroundColor: "pink",
         },
         dark: {
-          backgroundColor: "red"
-        }
-      }
-    })*/
+          backgroundColor: "red",
+        },
+      },
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

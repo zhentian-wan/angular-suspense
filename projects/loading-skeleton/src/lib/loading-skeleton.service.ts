@@ -6,8 +6,9 @@ import {
   LOADING_DEFUALT_CONFIG,
   ILoadingConfig,
   ITheme,
-  ILoadingConfigTheme
+  ILoadingConfigTheme,
 } from "./loading-skeleton.config";
+import { ThrowStmt } from "@angular/compiler";
 
 @Injectable()
 export class LoadingSkeletonService {
@@ -15,7 +16,7 @@ export class LoadingSkeletonService {
   private modeSubject = new BehaviorSubject<string>("light");
   private themeSubject = new BehaviorSubject<ITheme>({
     backgroundColor: this.theme[this.mode].backgroundColor,
-    fontColor: this.theme[this.mode].fontColor
+    fontColor: this.theme[this.mode].fontColor,
   });
   loading$: Observable<boolean> = this.loadingSubject.asObservable();
   theme$: Observable<ITheme> = this.themeSubject.asObservable();
@@ -25,7 +26,13 @@ export class LoadingSkeletonService {
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
     private userConfig: ILoadingConfig
-  ) {}
+  ) {
+    if (this.userConfig.duration) {
+      console.warn(
+        '[NgxLoadingSkeletonModule.forRoot]: "duration" will be deprecated in the future, please use "animationSpeed" instead'
+      );
+    }
+  }
 
   get config() {
     return this.userConfig;
@@ -36,7 +43,13 @@ export class LoadingSkeletonService {
   }
 
   get duration() {
-    return this.config.duration;
+    const duartion = this.userConfig.duration;
+
+    if (duartion) {
+      return duartion;
+    }
+
+    return this.config.animationSpeed;
   }
 
   get mode() {

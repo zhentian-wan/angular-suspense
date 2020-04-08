@@ -1,6 +1,6 @@
 import { Injectable, Inject, Optional } from "@angular/core";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { concatMap, tap, finalize } from "rxjs/operators";
+import { BehaviorSubject, Observable, of, combineLatest, timer } from "rxjs";
+import { concatMap, tap, finalize, map } from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
   LOADING_DEFUALT_CONFIG,
@@ -22,6 +22,11 @@ export class LoadingSkeletonService {
   theme$: Observable<ITheme> = this.themeSubject.asObservable();
   mode$: Observable<string> = this.modeSubject.asObservable();
 
+  // according to Facebook UI team research, it would be a better
+  // user experience to show spinner a little bit longer than
+  // when user has a high internet speed.
+  // Avoid flashing screen
+  private _flashingLimitTimer = timer(this.config.busyMinDurationMs);
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
@@ -67,7 +72,9 @@ export class LoadingSkeletonService {
   showingFor<T>(obs$: Observable<T>): Observable<T> {
     return of(null).pipe(
       tap(() => this.show()),
-      concatMap(() => obs$),
+      concatMap(() => combineLatest([obs$, this._flashingLimitTimer])),
+      map(([data, _]) => data),
+      tap(console.log),
       finalize(() => this.hide())
     );
   }

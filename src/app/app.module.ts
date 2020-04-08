@@ -10,8 +10,8 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
   imports: [
     BrowserModule,
     CommonModule,
-    // NgxLoadingSkeletonModule,
-    NgxLoadingSkeletonModule.forRoot({
+    NgxLoadingSkeletonModule,
+    /*NgxLoadingSkeletonModule.forRoot({
       animationSpeed: "2s",
       theme: {
         light: {
@@ -21,7 +21,7 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
           backgroundColor: "red",
         },
       },
-    }),
+    }),*/
   ],
   providers: [],
   bootstrap: [AppComponent],

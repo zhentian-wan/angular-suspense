@@ -8,11 +8,14 @@ export interface ILoadingConfigTheme {
   light?: ITheme;
   dark?: ITheme;
 }
+export interface ITransition {}
 export interface ILoadingConfig {
   showContent?: boolean;
   theme?: ILoadingConfigTheme;
   duration?: string;
   animationSpeed?: string;
+  busyMinDurationMs?: number;
+  busyDelayMs?: number;
 }
 
 export const LOADING_DEFUALT_CONFIG: ILoadingConfig = {
@@ -28,6 +31,8 @@ export const LOADING_DEFUALT_CONFIG: ILoadingConfig = {
       fontColor: `rgb(227, 227, 227)`,
     },
   },
+  busyMinDurationMs: 700,
+  busyDelayMs: 300,
 };
 export const LOADING_CONFIG_TOKEN = new InjectionToken<ILoadingConfig>(
   "LOADING_CONFIG_TOKEN"

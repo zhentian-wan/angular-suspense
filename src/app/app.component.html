@@ -64,59 +64,6 @@
 
 <hr />
 
-<h2>Showing Custom Placeholder: Using content projection</h2>
-
-<loading-skeleton
-  [theme]="theme"
-  [mode]="themeMode"
-  [isVisible]="isVisible"
-  ariaLabel="Loading the page... please wait"
->
-  <section>
-    <div class="row">
-      <div class="flex-8">
-        <loading-headline size="m"> </loading-headline>
-        <loading-list count="8" size="l"> </loading-list>
-      </div>
-      <div class="flex-4">
-        <div class="row" style="justify-content: center; align-items: center;">
-          <div flex="4">
-            <loading-image [theme]="theme" [mode]="themeMode"> </loading-image>
-          </div>
-          <div flex="8" style="width: 100%;">
-            <loading-text [theme]="theme" [mode]="themeMode" size="m">
-            </loading-text>
-            <loading-text [theme]="theme" [mode]="themeMode" size="s">
-            </loading-text>
-            <loading-text [theme]="theme" [mode]="themeMode" size="s">
-            </loading-text>
-          </div>
-        </div>
-
-        <loading-text [theme]="theme" [mode]="themeMode" size="l">
-        </loading-text>
-        <loading-text [theme]="theme" [mode]="themeMode" size="l">
-        </loading-text>
-        <loading-text
-          [theme]="theme"
-          [mode]="themeMode"
-          size="s"
-        ></loading-text>
-        <loading-textarea
-          [theme]="theme"
-          [mode]="themeMode"
-          style="position: relative; top: 20px;"
-        ></loading-textarea>
-      </div>
-    </div>
-    <div class="row">
-      <loading-button></loading-button>
-      <loading-button></loading-button>
-    </div>
-  </section>
-</loading-skeleton>
-<hr />
-
 <h2>Available components</h2>
 
 <loading-text size="s">

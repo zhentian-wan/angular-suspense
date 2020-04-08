@@ -1,27 +1,31 @@
-import { Component } from '@angular/core';
-import { LoadingSkeletonService } from 'projects/loading-skeleton/src/public-api';
+import { Component } from "@angular/core";
+import { LoadingSkeletonService } from "projects/loading-skeleton/src/public-api";
+import { timer } from "rxjs";
+import { mapTo } from "rxjs/operators";
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  providers: [LoadingSkeletonService]
+  selector: "app-root",
+  templateUrl: "./app.component.html",
+  styleUrls: ["./app.component.scss"],
+  providers: [LoadingSkeletonService],
 })
 export class AppComponent {
-  title = 'libs-workspaces';
+  title = "libs-workspaces";
   isDark: boolean = false;
   isVisible;
   theme = {
     light: {
-      backgroundColor: 'lightblue'
+      backgroundColor: "lightblue",
     },
     dark: {
-      backgroundColor: 'darkblue'
-    }
+      backgroundColor: "darkblue",
+    },
   };
-  themeMode = 'light';
+  themeMode = "light";
   constructor(private loadingService: LoadingSkeletonService) {
-    this.loadingService.show();
+    this.loadingService
+      .showingFor(timer(200).pipe(mapTo("data coming back")))
+      .subscribe();
     this.isVisible = false;
   }
 
@@ -33,6 +37,6 @@ export class AppComponent {
   }
 
   cmpToggleMode() {
-    this.themeMode = this.themeMode === 'light' ? 'dark' : 'light';
+    this.themeMode = this.themeMode === "light" ? "dark" : "light";
   }
 }

@@ -8,7 +8,6 @@ export interface ILoadingConfigTheme {
   light?: ITheme;
   dark?: ITheme;
 }
-export interface ITransition {}
 export interface ILoadingConfig {
   showContent?: boolean;
   theme?: ILoadingConfigTheme;

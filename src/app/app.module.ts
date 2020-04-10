@@ -12,16 +12,16 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
     CommonModule,
     NgxLoadingSkeletonModule,
     /*NgxLoadingSkeletonModule.forRoot({
-      duration: "2s",
+      animationSpeed: "2s",
       theme: {
         light: {
-          backgroundColor: "pink"
+          backgroundColor: "pink",
         },
         dark: {
-          backgroundColor: "red"
-        }
-      }
-    })*/
+          backgroundColor: "red",
+        },
+      },
+    }),*/
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -195,12 +195,14 @@ this.loadingService.changeMode("light"); // set light mode
 
 ## Configuration
 
-You can set `backgroundColor`, `fontColor` and animation `duration`.
+You can set `backgroundColor`, `fontColor`, `busyDelayMs`, `busyMinDurationMs` and `animationSpeed`.
 
 ```typescript
 imports: [
   LoadingSkeletonModule.forRoot({
-    duration: "1.5s", // default: 0.9s
+    animationSpeed: "1.5s", // default: 0.9s
+    busyDelayMs: 300, // within 300ms, don't show the loading skeleton
+    busyMinDurationMs: 700, // showing loading skeleton for at least 700ms
     theme: {
       // the same as default value
       light: {

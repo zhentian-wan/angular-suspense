@@ -31,3 +31,9 @@
   - LoadingButtonComponent
   - LoadingHeadlineComponent
   - LoadingImageComponent
+
+## v1.1.1 - 10.04.2020
+
+- `busyDelayMs`: under 300ms, don't show the loading skeleton
+- `busyMinDurationMs`: if showing loading skeleton, showing at least 700ms
+- `busyDelayMs` & `busyMinDurationMs` configurable

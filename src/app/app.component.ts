@@ -24,7 +24,7 @@ export class AppComponent {
   themeMode = "light";
   constructor(private loadingService: LoadingSkeletonService) {
     this.loadingService
-      .showingFor(timer(200).pipe(mapTo("data coming back")))
+      .showingFor(timer(350).pipe(mapTo("data coming back")))
       .subscribe();
     this.isVisible = false;
   }

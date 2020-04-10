@@ -1,6 +1,25 @@
 import { Injectable, Inject, Optional } from "@angular/core";
-import { BehaviorSubject, Observable, of, combineLatest, timer } from "rxjs";
-import { concatMap, tap, finalize, map } from "rxjs/operators";
+import {
+  BehaviorSubject,
+  Observable,
+  of,
+  combineLatest,
+  timer,
+  race,
+} from "rxjs";
+import {
+  concatMap,
+  tap,
+  finalize,
+  map,
+  mapTo,
+  takeUntil,
+  pairwise,
+  filter,
+  distinctUntilChanged,
+  switchMap,
+  delay,
+} from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
   LOADING_DEFUALT_CONFIG,
@@ -22,11 +41,14 @@ export class LoadingSkeletonService {
   theme$: Observable<ITheme> = this.themeSubject.asObservable();
   mode$: Observable<string> = this.modeSubject.asObservable();
 
+  private _defVal = "_$$ngx_loading_skeleton_def$$_";
+  private _isLoadingCompleted$;
   // according to Facebook UI team research, it would be a better
   // user experience to show spinner a little bit longer than
   // when user has a high internet speed.
   // Avoid flashing screen
   private _flashingLimitTimer = timer(this.config.busyMinDurationMs);
+  private _flashThreshold = timer(this.config.busyDelayMs);
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
@@ -37,6 +59,11 @@ export class LoadingSkeletonService {
         '[NgxLoadingSkeletonModule.forRoot]: "duration" will be deprecated in the future, please use "animationSpeed" instead'
       );
     }
+    this._isLoadingCompleted$ = this.loading$.pipe(
+      pairwise(),
+      distinctUntilChanged(),
+      filter(([prev, curr]) => prev && !curr)
+    );
   }
 
   get config() {
@@ -70,11 +97,22 @@ export class LoadingSkeletonService {
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {
+    race(
+      obs$,
+      this._flashThreshold.pipe(
+        mapTo(this._defVal),
+        takeUntil(this._isLoadingCompleted$)
+      )
+    )
+      .pipe(
+        filter((x) => x === this._defVal),
+        tap(() => this.show())
+      )
+      .subscribe();
+
     return of(null).pipe(
-      tap(() => this.show()),
       concatMap(() => combineLatest([obs$, this._flashingLimitTimer])),
       map(([data, _]) => data),
-      tap(console.log),
       finalize(() => this.hide())
     );
   }

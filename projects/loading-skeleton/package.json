@@ -1,6 +1,6 @@
 {
   "name": "ngx-loading-skeleton",
-  "version": "1.1.1",
+  "version": "1.1.0",
   "author": {
     "name": "Zhentian Wan",
     "email": "answer881215@gmail.com"
@@ -23,8 +23,8 @@
     "@angular/core": "^9.1.0",
     "tslib": "^1.10.0"
   },
-  "publishConfig": { 
-    "registry": "https://npm.pkg.github.com/" 
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
   },
   "license": "MIT"
 }

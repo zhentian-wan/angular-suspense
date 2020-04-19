@@ -37,3 +37,4 @@
 - `busyDelayMs`: under 300ms, don't show the loading skeleton
 - `busyMinDurationMs`: if showing loading skeleton, showing at least 700ms
 - `busyDelayMs` & `busyMinDurationMs` configurable
+- Added bouncing opacity animation

@@ -13,8 +13,8 @@ import { ITheme, ILoadingConfigTheme } from "./loading-skeleton.config";
         display: flex;
         flex-direction: column;
       }
-    `
-  ]
+    `,
+  ],
 })
 export class LoadingSkeletonComponent implements OnInit {
   _theme: ILoadingConfigTheme;
@@ -42,7 +42,7 @@ export class LoadingSkeletonComponent implements OnInit {
   @Input() log = () =>
     console.dir({
       ...this.loadingService.config,
-      mode: this.loadingService.mode
+      mode: this.loadingService.mode,
     });
 
   loading$: Observable<boolean>;
@@ -60,8 +60,8 @@ export class LoadingSkeletonComponent implements OnInit {
     return {
       $implicit: {
         theme: this.theme,
-        mode: this.mode
-      }
+        mode: this.mode,
+      },
     };
   }
 }

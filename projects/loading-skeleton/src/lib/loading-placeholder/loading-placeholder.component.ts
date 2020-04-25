@@ -3,7 +3,8 @@ import {
   OnInit,
   Input,
   ElementRef,
-  AfterViewInit
+  AfterViewInit,
+  Renderer2,
 } from "@angular/core";
 import { LoadingSkeletonService } from "../loading-skeleton.service";
 import { ITheme } from "../loading-skeleton.config";
@@ -12,7 +13,7 @@ import { combineLatest } from "rxjs";
 @Component({
   selector: "loading-placeholder",
   templateUrl: "./loading-placeholder.component.html",
-  styleUrls: ["./loading-placeholder.component.scss"]
+  styleUrls: ["./loading-placeholder.component.scss"],
 })
 export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   @Input() type: string;
@@ -24,6 +25,7 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   backgroundColor: string;
   fontColor: string;
   constructor(
+    private render: Renderer2,
     private el: ElementRef,
     public loadingService: LoadingSkeletonService
   ) {}
@@ -60,9 +62,10 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.el.nativeElement.style.setProperty(
-      "--duration",
-      this.loadingService.duration
+    this.render.setAttribute(
+      this.el.nativeElement,
+      "style",
+      `--duration:${this.loadingService.duration}`
     );
   }
 

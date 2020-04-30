@@ -5,6 +5,7 @@ import {
   ElementRef,
   AfterViewInit,
   Renderer2,
+  ViewEncapsulation,
 } from "@angular/core";
 import { LoadingSkeletonService } from "../loading-skeleton.service";
 import { ITheme } from "../loading-skeleton.config";
@@ -14,6 +15,7 @@ import { combineLatest } from "rxjs";
   selector: "loading-placeholder",
   templateUrl: "./loading-placeholder.component.html",
   styleUrls: ["./loading-placeholder.component.scss"],
+  encapsulation: ViewEncapsulation.ShadowDom,
 })
 export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   @Input() type: string;

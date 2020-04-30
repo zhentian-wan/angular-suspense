@@ -38,3 +38,7 @@
 - `busyMinDurationMs`: if showing loading skeleton, showing at least 700ms
 - `busyDelayMs` & `busyMinDurationMs` configurable
 - Added bouncing opacity animation
+
+## v1.1.2 - 30.04.2020
+
+- Using `ShadowDOM` for placholder component

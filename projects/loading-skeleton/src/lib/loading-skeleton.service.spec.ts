@@ -15,20 +15,20 @@ describe("LoadingSkeletonService", () => {
       theme: {
         light: {
           backgroundColor: "grey",
-          fontColor: "grey"
+          fontColor: "grey",
         },
         dark: {
           backgroundColor: "black",
-          fontColor: "black"
-        }
-      }
+          fontColor: "black",
+        },
+      },
     };
 
     TestBed.configureTestingModule({
       providers: [
         LoadingSkeletonService,
-        { provide: LOADING_CONFIG_TOKEN, useValue: mockConfigToken }
-      ]
+        { provide: LOADING_CONFIG_TOKEN, useValue: mockConfigToken },
+      ],
     });
     service = TestBed.inject(LoadingSkeletonService);
   });
@@ -39,7 +39,7 @@ describe("LoadingSkeletonService", () => {
 
   it("showingFor should emit side effect to control loading", fakeAsync(() => {
     let isLoading;
-    service.loading$.subscribe(b => {
+    service.loading$.subscribe((b) => {
       isLoading = b;
     });
     expect(isLoading).toBe(
@@ -77,8 +77,24 @@ describe("LoadingSkeletonService", () => {
     const source$ = of("data").pipe(delay(500), take(1));
     const res$ = service.showingFor(source$);
     expect(res).toBe(undefined);
-    res$.subscribe(d => (res = d));
+    res$.subscribe((d) => (res = d));
     tick(500);
     expect(res).toBe("data");
+  }));
+
+  it("showLoadingStatus should trigger side effect to control spinner show / hide", fakeAsync(() => {
+    const source$ = of("data").pipe(
+      delay(500),
+      service.showLoadingStatus(),
+      take(1)
+    );
+    const showSpy = spyOn(service, "show");
+    const hideSpy = spyOn(service, "hide");
+    expect(showSpy).not.toHaveBeenCalled();
+    source$.subscribe();
+    expect(hideSpy).not.toHaveBeenCalled();
+    expect(showSpy).toHaveBeenCalled();
+    tick(500);
+    expect(hideSpy).toHaveBeenCalled();
   }));
 });

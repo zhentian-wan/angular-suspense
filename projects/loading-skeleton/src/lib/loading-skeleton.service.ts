@@ -6,6 +6,8 @@ import {
   combineLatest,
   timer,
   race,
+  Subscriber,
+  Subscription,
 } from "rxjs";
 import {
   concatMap,
@@ -94,6 +96,20 @@ export class LoadingSkeletonService {
 
   hide() {
     this.loadingSubject.next(false);
+  }
+
+  showLoadingStatus() {
+    return (source) => {
+      return new Observable((subscriber: Subscriber<any>) => {
+        this.show();
+        const sub: Subscription = source.subscribe(subscriber);
+
+        return () => {
+          sub.unsubscribe();
+          this.hide();
+        };
+      });
+    };
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {

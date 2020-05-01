@@ -142,6 +142,40 @@ For example:
 
 ### `LoadingSkeletonService`
 
+#### `show() / hide()`
+
+```typescript
+this.loadingSerivce.show();
+await this.apiService.load();
+this.loadingService.hide();
+```
+
+#### `showLoadingStatus()` pipeable observalbe operator (Recommended)
+
+It trigger side effect for calling `show() / hide()`
+
+Example:
+
+```typescript
+@Component({
+  selector: "categories",
+  templateUrl: "./categories.component.html",
+  styleUrls: ["./categories.component.scss"],
+  providers: [LoadingSkeletonService],
+})
+export class CategoriesComponent implements OnInit {
+  categories$: Observable<Category[]>;
+  constructor(
+    private categoriesService: CategoriesService,
+    private loadingService: LoadingSkeletonService
+  ) {
+    this.categories$ = this.categoriesService
+      .getCategories()
+      .pipe(this.loadingService.showLoadingStatus());
+  }
+}
+```
+
 #### `showingFor<T>(Obs\$: Observable<T>): Observable<T>`
 
 You can pass in an observable which will finially complete, `showingFor` will trigger
@@ -178,28 +212,20 @@ export class CategoriesComponent implements OnInit {
 
 this.loadingService.showingFor(
   this.router.paramMap.pipe(
-    map(paramMap => paramMap.get('id')),
-    switchMap(id => this.categoriesService.getCategoryById(id))
+    map((paramMap) => paramMap.get("id")),
+    switchMap((id) => this.categoriesService.getCategoryById(id))
   )
-)
+);
 
 // Good
 // Categories Service use http call which will complete automatically
 
 this.router.paramMap.pipe(
-  map(paramMap => paramMap.get('id')),
-  switchMap(id => this.loadingService.showingFor(this.categoriesService.getCategoryById(id)))
-)
-```
-
-#### `show() / hide()`
-
-If you wish to have normal control flow approach. You can use `show / hide`
-
-```typescript
-this.loadingSerivce.show();
-await this.apiService.load();
-this.loadingService.hide();
+  map((paramMap) => paramMap.get("id")),
+  switchMap((id) =>
+    this.loadingService.showingFor(this.categoriesService.getCategoryById(id))
+  )
+);
 ```
 
 #### `changeMode(mode: 'light'|'dark'): void`

@@ -42,3 +42,7 @@
 ## v1.1.2 - 30.04.2020
 
 - Using `ShadowDOM` for placholder component
+
+## v1.2.0 - 01.05.2020
+
+- Add pipeable operator `showLoadingStatus()` to LoadingSkeletonService

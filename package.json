@@ -7,6 +7,8 @@
     "build": "ng build --project=loading-skeleton --prod",
     "dev": "ng build --project=loading-skeleton --watch",
     "test": "ng test --project=loading-skeleton --watch",
+    "prepare": "npm run build",
+    "postpublish": "git push --tags",
     "lint": "ng lint"
   },
   "private": true,

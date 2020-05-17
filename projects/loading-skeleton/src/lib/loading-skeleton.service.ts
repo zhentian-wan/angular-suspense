@@ -39,6 +39,11 @@ export class LoadingSkeletonService {
   theme$: Observable<ITheme> = this.themeSubject.asObservable();
   mode$: Observable<string> = this.modeSubject.asObservable();
 
+  private taskStartSubject = new Subject();
+  private taskStart = this.taskStartSubject.asObservable();
+  private taskEndSubject = new Subject();
+  private taskEnd = this.taskEndSubject.asObservable();
+
   // according to Facebook UI team research, it would be a better
   // user experience to show spinner a little bit longer than
   // when user has a high internet speed.
@@ -89,82 +94,82 @@ export class LoadingSkeletonService {
     this.loadingSubject.next(false);
   }
 
+  private controller() {
+    const busyDelayTimerStart = this.taskStart.pipe(
+      switchMap(() => this._flashThreshold)
+    );
+    const busyDelayTimerEnd = busyDelayTimerStart.pipe(takeUntil(this.taskEnd));
+    const emitOnTaskEnd = this.taskEnd.pipe(mapTo(1));
+    const emitOnDelayTimerEnd = busyDelayTimerEnd.pipe(mapTo(-1));
+    const emitOnMinDurationEnd = this._flashingLimitTimer.pipe(mapTo(-1));
+
+    ////////////// start/////////////////
+
+    const raceBetweenTaskAndDelay = combineLatest([
+      emitOnTaskEnd.pipe(startWith(null)),
+      emitOnDelayTimerEnd.pipe(startWith(null)),
+    ]).pipe(skip(1));
+    const taskEndBeforeDelay = raceBetweenTaskAndDelay.pipe(
+      filter(([taskEndFirst, timerEndFirst]) => {
+        return taskEndFirst === 1 && timerEndFirst === null;
+      })
+    );
+    const shouldNotShowSpinner = taskEndBeforeDelay.pipe(mapTo(false));
+    const taskEndAfterTimeout = raceBetweenTaskAndDelay.pipe(
+      filter(([taskEndFirst, timerEndFirst]) => {
+        return taskEndFirst === null && timerEndFirst === -1;
+      })
+    );
+    const shouldShowSpinner = taskEndAfterTimeout.pipe(mapTo(true));
+    const showSpinner = shouldShowSpinner.pipe(
+      tap(() => {
+        this.show();
+      })
+    );
+
+    /////////////// end ///////////////
+
+    const raceBetweenTaskAndMinDuration = combineLatest([
+      emitOnTaskEnd.pipe(startWith(null)),
+      emitOnMinDurationEnd.pipe(startWith(null)),
+    ]).pipe(skip(1));
+    const hideSpinnerUntilMinDurationEnd = raceBetweenTaskAndMinDuration.pipe(
+      filter(([taskEndFirst, timerEndFirst]) => {
+        return taskEndFirst === 1 && timerEndFirst === null;
+      })
+    );
+    const hideSpinnerAfterTimerAndTaskEnd = raceBetweenTaskAndMinDuration.pipe(
+      filter(([taskEndFirst, timerEndFirst]) => {
+        return taskEndFirst === 1 && timerEndFirst === -1;
+      })
+    );
+    const hideSpinner = merge(
+      // case 1: should not show spinner at all
+      shouldNotShowSpinner,
+      // case 2: task end, but wait until min duration timer ends
+      combineLatest([hideSpinnerUntilMinDurationEnd, emitOnMinDurationEnd]),
+      // case 3: task takes a long time, wait unitl its end
+      hideSpinnerAfterTimerAndTaskEnd
+    ).pipe(
+      tap(() => {
+        this.hide();
+      })
+    );
+    return showSpinner.pipe(takeUntil(hideSpinner));
+  }
+
   showLoadingStatus() {
     return (source) => {
       return new Observable((subscriber: Subscriber<any>) => {
-        const taskStartSubject = new Subject();
-        const taskStart = taskStartSubject.asObservable();
-        const taskEndSubject = new Subject();
-        const taskEnd = taskEndSubject.asObservable();
-        const busyDelayTimerStart = taskStart.pipe(
-          switchMap(() => this._flashThreshold)
-        );
-        const busyDelayTimerEnd = busyDelayTimerStart.pipe(takeUntil(taskEnd));
-        const emitOnTaskEnd = taskEnd.pipe(mapTo(1));
-        const emitOnDelayTimerEnd = busyDelayTimerEnd.pipe(mapTo(-1));
-        const emitOnMinDurationEnd = this._flashingLimitTimer.pipe(mapTo(-1));
-
-        ////////////// start/////////////////
-
-        const raceBetweenTaskAndDelay = combineLatest([
-          emitOnTaskEnd.pipe(startWith(null)),
-          emitOnDelayTimerEnd.pipe(startWith(null)),
-        ]).pipe(skip(1));
-        const taskEndBeforeDelay = raceBetweenTaskAndDelay.pipe(
-          filter(([taskEndFirst, timerEndFirst]) => {
-            return taskEndFirst === 1 && timerEndFirst === null;
-          })
-        );
-        const shouldNotShowSpinner = taskEndBeforeDelay.pipe(mapTo(false));
-        const taskEndAfterTimeout = raceBetweenTaskAndDelay.pipe(
-          filter(([taskEndFirst, timerEndFirst]) => {
-            return taskEndFirst === null && timerEndFirst === -1;
-          })
-        );
-        const shouldShowSpinner = taskEndAfterTimeout.pipe(mapTo(true));
-        const showSpinner = shouldShowSpinner.pipe(
-          tap(() => {
-            this.show();
-          })
-        );
-
-        /////////////// end ///////////////
-
-        const raceBetweenTaskAndMinDuration = combineLatest([
-          emitOnTaskEnd.pipe(startWith(null)),
-          emitOnMinDurationEnd.pipe(startWith(null)),
-        ]).pipe(skip(1));
-        const hideSpinnerUntilMinDurationEnd = raceBetweenTaskAndMinDuration.pipe(
-          filter(([taskEndFirst, timerEndFirst]) => {
-            return taskEndFirst === 1 && timerEndFirst === null;
-          })
-        );
-        const hideSpinnerAfterTimerAndTaskEnd = raceBetweenTaskAndMinDuration.pipe(
-          filter(([taskEndFirst, timerEndFirst]) => {
-            return taskEndFirst === 1 && timerEndFirst === -1;
-          })
-        );
-        const hideSpinner = merge(
-          // case 1: should not show spinner at all
-          shouldNotShowSpinner,
-          // case 2: task end, but wait until min duration timer ends
-          combineLatest([hideSpinnerUntilMinDurationEnd, emitOnMinDurationEnd]),
-          // case 3: task takes a long time, wait unitl its end
-          hideSpinnerAfterTimerAndTaskEnd
-        ).pipe(
-          tap(() => {
-            this.hide();
-          })
-        );
-        showSpinner.pipe(takeUntil(hideSpinner)).subscribe();
+        this.controller().subscribe();
         const sub = of(null)
           .pipe(
             tap(() => {
-              taskStartSubject.next();
+              this.taskStartSubject.next();
             }),
             concatMap(() => source),
             finalize(() => {
-              taskEndSubject.next();
+              this.taskEndSubject.next();
             })
           )
           .subscribe(subscriber);
@@ -177,12 +182,13 @@ export class LoadingSkeletonService {
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {
+    this.controller().subscribe();
     return of(null).pipe(
       tap(() => {
-        this.show();
+        this.taskStartSubject.next();
       }),
       concatMap(() => obs$),
-      finalize(() => this.hide())
+      finalize(() => this.taskEndSubject.next())
     );
   }
 

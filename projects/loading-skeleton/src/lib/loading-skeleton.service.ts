@@ -5,31 +5,27 @@ import {
   of,
   combineLatest,
   timer,
-  race,
+  merge,
+  Subject,
   Subscriber,
-  Subscription,
 } from "rxjs";
 import {
   concatMap,
   tap,
   finalize,
-  map,
   mapTo,
   takeUntil,
-  pairwise,
+  skip,
   filter,
-  distinctUntilChanged,
   switchMap,
-  delay,
+  startWith,
 } from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
-  LOADING_DEFUALT_CONFIG,
   ILoadingConfig,
   ITheme,
   ILoadingConfigTheme,
 } from "./loading-skeleton.config";
-import { ThrowStmt } from "@angular/compiler";
 
 @Injectable()
 export class LoadingSkeletonService {
@@ -43,13 +39,13 @@ export class LoadingSkeletonService {
   theme$: Observable<ITheme> = this.themeSubject.asObservable();
   mode$: Observable<string> = this.modeSubject.asObservable();
 
-  private _defVal = "_$$ngx_loading_skeleton_def$$_";
-  private _isLoadingCompleted$;
   // according to Facebook UI team research, it would be a better
   // user experience to show spinner a little bit longer than
   // when user has a high internet speed.
   // Avoid flashing screen
-  private _flashingLimitTimer = timer(this.config.busyMinDurationMs);
+  private _flashingLimitTimer = timer(
+    this.config.busyMinDurationMs + this.config.busyDelayMs
+  );
   private _flashThreshold = timer(this.config.busyDelayMs);
   constructor(
     @Optional()
@@ -61,11 +57,6 @@ export class LoadingSkeletonService {
         '[NgxLoadingSkeletonModule.forRoot]: "duration" will be deprecated in the future, please use "animationSpeed" instead'
       );
     }
-    this._isLoadingCompleted$ = this.loading$.pipe(
-      pairwise(),
-      distinctUntilChanged(),
-      filter(([prev, curr]) => prev && !curr)
-    );
   }
 
   get config() {
@@ -101,34 +92,96 @@ export class LoadingSkeletonService {
   showLoadingStatus() {
     return (source) => {
       return new Observable((subscriber: Subscriber<any>) => {
-        this.show();
-        const sub: Subscription = source.subscribe(subscriber);
+        const taskStartSubject = new Subject();
+        const taskStart = taskStartSubject.asObservable();
+        const taskEndSubject = new Subject();
+        const taskEnd = taskEndSubject.asObservable();
+        const busyDelayTimerStart = taskStart.pipe(
+          switchMap(() => this._flashThreshold)
+        );
+        const busyDelayTimerEnd = busyDelayTimerStart.pipe(takeUntil(taskEnd));
+        const emitOnTaskEnd = taskEnd.pipe(mapTo(1));
+        const emitOnDelayTimerEnd = busyDelayTimerEnd.pipe(mapTo(-1));
+        const emitOnMinDurationEnd = this._flashingLimitTimer.pipe(mapTo(-1));
+
+        ////////////// start/////////////////
+
+        const raceBetweenTaskAndDelay = combineLatest([
+          emitOnTaskEnd.pipe(startWith(null)),
+          emitOnDelayTimerEnd.pipe(startWith(null)),
+        ]).pipe(skip(1));
+        const taskEndBeforeDelay = raceBetweenTaskAndDelay.pipe(
+          filter(([taskEndFirst, timerEndFirst]) => {
+            return taskEndFirst === 1 && timerEndFirst === null;
+          })
+        );
+        const shouldNotShowSpinner = taskEndBeforeDelay.pipe(mapTo(false));
+        const taskEndAfterTimeout = raceBetweenTaskAndDelay.pipe(
+          filter(([taskEndFirst, timerEndFirst]) => {
+            return taskEndFirst === null && timerEndFirst === -1;
+          })
+        );
+        const shouldShowSpinner = taskEndAfterTimeout.pipe(mapTo(true));
+        const showSpinner = shouldShowSpinner.pipe(
+          tap(() => {
+            this.show();
+          })
+        );
+
+        /////////////// end ///////////////
+
+        const raceBetweenTaskAndMinDuration = combineLatest([
+          emitOnTaskEnd.pipe(startWith(null)),
+          emitOnMinDurationEnd.pipe(startWith(null)),
+        ]).pipe(skip(1));
+        const hideSpinnerUntilMinDurationEnd = raceBetweenTaskAndMinDuration.pipe(
+          filter(([taskEndFirst, timerEndFirst]) => {
+            return taskEndFirst === 1 && timerEndFirst === null;
+          })
+        );
+        const hideSpinnerAfterTimerAndTaskEnd = raceBetweenTaskAndMinDuration.pipe(
+          filter(([taskEndFirst, timerEndFirst]) => {
+            return taskEndFirst === 1 && timerEndFirst === -1;
+          })
+        );
+        const hideSpinner = merge(
+          // case 1: should not show spinner at all
+          shouldNotShowSpinner,
+          // case 2: task end, but wait until min duration timer ends
+          combineLatest([hideSpinnerUntilMinDurationEnd, emitOnMinDurationEnd]),
+          // case 3: task takes a long time, wait unitl its end
+          hideSpinnerAfterTimerAndTaskEnd
+        ).pipe(
+          tap(() => {
+            this.hide();
+          })
+        );
+        showSpinner.pipe(takeUntil(hideSpinner)).subscribe();
+        const sub = of(null)
+          .pipe(
+            tap(() => {
+              taskStartSubject.next();
+            }),
+            concatMap(() => source),
+            finalize(() => {
+              taskEndSubject.next();
+            })
+          )
+          .subscribe(subscriber);
 
         return () => {
           sub.unsubscribe();
-          this.hide();
         };
       });
     };
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {
-    race(
-      obs$,
-      this._flashThreshold.pipe(
-        mapTo(this._defVal),
-        takeUntil(this._isLoadingCompleted$)
-      )
-    )
-      .pipe(
-        filter((x) => x === this._defVal),
-        tap(() => this.show())
-      )
-      .subscribe();
-
     return of(null).pipe(
-      concatMap(() => combineLatest([obs$, this._flashingLimitTimer])),
-      map(([data, _]) => data),
+      tap(() => {
+        this.show();
+      }),
+      concatMap(() => obs$),
       finalize(() => this.hide())
     );
   }

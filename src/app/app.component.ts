@@ -10,6 +10,7 @@ import { mapTo } from "rxjs/operators";
   providers: [LoadingSkeletonService],
 })
 export class AppComponent {
+  data$;
   title = "libs-workspaces";
   isDark: boolean = false;
   isVisible;
@@ -23,13 +24,11 @@ export class AppComponent {
   };
   themeMode = "light";
   constructor(private loadingService: LoadingSkeletonService) {
-    timer(3500)
-      .pipe(mapTo("data coming back"), this.loadingService.showLoadingStatus())
-      .subscribe();
+    this.data$ = timer(1500).pipe(
+      this.loadingService.showLoadingStatus(),
+      mapTo("data coming back")
+    );
 
-    /*this.loadingService
-      .showingFor(timer(3500).pipe(mapTo("data coming back")))
-      .subscribe();*/
     this.isVisible = false;
   }
 

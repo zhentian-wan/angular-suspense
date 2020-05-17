@@ -9,7 +9,8 @@
     "test": "ng test --project=loading-skeleton --watch",
     "prepare": "npm run build",
     "postpublish": "git push --tags",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "minor": "cd projects/loading-skeleton && sudo npm version minor && sudo npm run build && cd dist && cd loading-skeleton && sudo npm publish && git push --tags"
   },
   "private": true,
   "dependencies": {

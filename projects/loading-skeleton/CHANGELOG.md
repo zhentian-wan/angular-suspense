@@ -46,3 +46,7 @@
 ## v1.2.0 - 01.05.2020
 
 - Add pipeable operator `showLoadingStatus()` to LoadingSkeletonService
+
+## v1.3.0 - 17.05.2020
+
+- Update `showingFor` & `showLoadingStatus` apis

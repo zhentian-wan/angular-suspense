@@ -13,12 +13,14 @@ import {
   concatMap,
   tap,
   finalize,
+  map,
   mapTo,
   takeUntil,
   skip,
   filter,
   switchMap,
   startWith,
+  takeWhile,
 } from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
@@ -43,6 +45,8 @@ export class LoadingSkeletonService {
   private taskStart = this.taskStartSubject.asObservable();
   private taskEndSubject = new Subject();
   private taskEnd = this.taskEndSubject.asObservable();
+  private hideSpinnerSubject = new Subject();
+  private hideSpinner$ = this.hideSpinnerSubject.asObservable();
 
   // according to Facebook UI team research, it would be a better
   // user experience to show spinner a little bit longer than
@@ -153,6 +157,7 @@ export class LoadingSkeletonService {
     ).pipe(
       tap(() => {
         this.hide();
+        this.hideSpinnerSubject.next(true);
       })
     );
     return showSpinner.pipe(takeUntil(hideSpinner));
@@ -167,10 +172,17 @@ export class LoadingSkeletonService {
             tap(() => {
               this.taskStartSubject.next();
             }),
-            concatMap(() => source),
-            finalize(() => {
-              this.taskEndSubject.next();
-            })
+            concatMap(() =>
+              combineLatest([
+                source.pipe(
+                  tap(() => {
+                    this.taskEndSubject.next();
+                  })
+                ),
+                this.hideSpinner$,
+              ])
+            ),
+            map(([data, _]) => data)
           )
           .subscribe(subscriber);
 
@@ -187,8 +199,17 @@ export class LoadingSkeletonService {
       tap(() => {
         this.taskStartSubject.next();
       }),
-      concatMap(() => obs$),
-      finalize(() => this.taskEndSubject.next())
+      concatMap(() =>
+        combineLatest([
+          obs$.pipe(
+            tap(() => {
+              this.taskEndSubject.next();
+            })
+          ),
+          this.hideSpinner$,
+        ])
+      ),
+      map(([data, _]) => data)
     );
   }
 

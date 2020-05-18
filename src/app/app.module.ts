@@ -14,7 +14,7 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
     NgxLoadingSkeletonModule.forRoot({
       animationSpeed: "2s",
       busyDelayMs: 300,
-      busyMinDurationMs: 1000,
+      busyMinDurationMs: 3000,
       theme: {
         light: {
           backgroundColor: "pink",

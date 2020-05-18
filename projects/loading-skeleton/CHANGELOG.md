@@ -50,3 +50,7 @@
 ## v1.3.0 - 17.05.2020
 
 - Update `showingFor` & `showLoadingStatus` apis
+
+## v1.3.1 - 17.05.2020
+
+- Fix data and skeleton showing at the same time

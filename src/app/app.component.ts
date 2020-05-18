@@ -24,15 +24,16 @@ export class AppComponent {
   };
   themeMode = "light";
   constructor(private loadingService: LoadingSkeletonService) {
-    this.data$ = timer(600).pipe(
+    this.data$ = timer(290).pipe(
       this.loadingService.showLoadingStatus(),
       mapTo("data coming back")
     );
 
     /*
     this.data$ = this.loadingService.showingFor(
-      timer(500).pipe(mapTo("data coming back"))
+      timer(4000).pipe(mapTo("data coming back"))
     );*/
+
     this.isVisible = false;
   }
 

@@ -30,8 +30,8 @@ export const LOADING_DEFUALT_CONFIG: ILoadingConfig = {
       fontColor: `rgb(227, 227, 227)`,
     },
   },
-  busyMinDurationMs: 700,
-  busyDelayMs: 300,
+  busyMinDurationMs: 0,
+  busyDelayMs: 0,
 };
 export const LOADING_CONFIG_TOKEN = new InjectionToken<ILoadingConfig>(
   "LOADING_CONFIG_TOKEN"

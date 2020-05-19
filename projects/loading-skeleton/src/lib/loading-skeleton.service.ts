@@ -1,4 +1,4 @@
-import { Injectable, Inject, Optional } from "@angular/core";
+import { Injectable, Inject, Optional, OnDestroy } from "@angular/core";
 import {
   BehaviorSubject,
   Observable,
@@ -8,11 +8,11 @@ import {
   merge,
   Subject,
   Subscriber,
+  Subscription,
 } from "rxjs";
 import {
   concatMap,
   tap,
-  finalize,
   map,
   mapTo,
   takeUntil,
@@ -20,7 +20,6 @@ import {
   filter,
   switchMap,
   startWith,
-  takeWhile,
 } from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
@@ -30,7 +29,7 @@ import {
 } from "./loading-skeleton.config";
 
 @Injectable()
-export class LoadingSkeletonService {
+export class LoadingSkeletonService implements OnDestroy {
   private loadingSubject = new BehaviorSubject<boolean>(false);
   private modeSubject = new BehaviorSubject<string>("light");
   private themeSubject = new BehaviorSubject<ITheme>({
@@ -42,9 +41,9 @@ export class LoadingSkeletonService {
   mode$: Observable<string> = this.modeSubject.asObservable();
 
   private taskStartSubject = new Subject();
-  private taskStart = this.taskStartSubject.asObservable();
+  private taskStart$ = this.taskStartSubject.asObservable();
   private taskEndSubject = new Subject();
-  private taskEnd = this.taskEndSubject.asObservable();
+  private taskEnd$ = this.taskEndSubject.asObservable();
   private hideSpinnerSubject = new Subject();
   private hideSpinner$ = this.hideSpinnerSubject.asObservable();
 
@@ -52,10 +51,12 @@ export class LoadingSkeletonService {
   // user experience to show spinner a little bit longer than
   // when user has a high internet speed.
   // Avoid flashing screen
-  private _flashingLimitTimer = timer(
+  private busyMinDurationTimer = timer(
     this.config.busyMinDurationMs + this.config.busyDelayMs
   );
-  private _flashThreshold = timer(this.config.busyDelayMs);
+  private busyDelayTimer = timer(this.config.busyDelayMs);
+
+  private subscription: Subscription;
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
@@ -66,6 +67,11 @@ export class LoadingSkeletonService {
         '[NgxLoadingSkeletonModule.forRoot]: "duration" will be deprecated in the future, please use "animationSpeed" instead'
       );
     }
+    this.subscription = this.controller().subscribe();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   get config() {
@@ -99,16 +105,17 @@ export class LoadingSkeletonService {
   }
 
   private controller() {
-    const busyDelayTimerStart = this.taskStart.pipe(
-      switchMap(() => this._flashThreshold)
+    const busyDelayTimerStart = this.taskStart$.pipe(
+      switchMap(() => this.busyDelayTimer)
     );
-    const busyDelayTimerEnd = busyDelayTimerStart.pipe(takeUntil(this.taskEnd));
-    const emitOnTaskEnd = this.taskEnd.pipe(mapTo(1));
+    const busyDelayTimerEnd = busyDelayTimerStart.pipe(
+      takeUntil(this.taskEnd$)
+    );
+    const emitOnTaskEnd = this.taskEnd$.pipe(mapTo(1));
     const emitOnDelayTimerEnd = busyDelayTimerEnd.pipe(mapTo(-1));
-    const emitOnMinDurationEnd = this._flashingLimitTimer.pipe(mapTo(-1));
+    const emitOnMinDurationEnd = this.busyMinDurationTimer.pipe(mapTo(-1));
 
-    ////////////// start/////////////////
-
+    ////////////// Show the loading skeleton /////////////////
     const raceBetweenTaskAndDelay = combineLatest([
       emitOnTaskEnd.pipe(startWith(null)),
       emitOnDelayTimerEnd.pipe(startWith(null)),
@@ -131,8 +138,7 @@ export class LoadingSkeletonService {
       })
     );
 
-    /////////////// end ///////////////
-
+    /////////////// hide loading skeleton ///////////////
     const raceBetweenTaskAndMinDuration = combineLatest([
       emitOnTaskEnd.pipe(startWith(null)),
       emitOnMinDurationEnd.pipe(startWith(null)),
@@ -166,22 +172,21 @@ export class LoadingSkeletonService {
   showLoadingStatus() {
     return (source) => {
       return new Observable((subscriber: Subscriber<any>) => {
-        this.controller().subscribe();
+        const emitOnObsEnd = source.pipe(
+          tap(() => {
+            this.taskEndSubject.next();
+          })
+        );
+        const waitForTaskAndSpinner = combineLatest([
+          emitOnObsEnd,
+          this.hideSpinner$,
+        ]);
         const sub = of(null)
           .pipe(
             tap(() => {
               this.taskStartSubject.next();
             }),
-            concatMap(() =>
-              combineLatest([
-                source.pipe(
-                  tap(() => {
-                    this.taskEndSubject.next();
-                  })
-                ),
-                this.hideSpinner$,
-              ])
-            ),
+            concatMap(() => waitForTaskAndSpinner),
             map(([data, _]) => data)
           )
           .subscribe(subscriber);
@@ -194,21 +199,20 @@ export class LoadingSkeletonService {
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {
-    this.controller().subscribe();
+    const emitOnObsEnd = obs$.pipe(
+      tap(() => {
+        this.taskEndSubject.next();
+      })
+    );
+    const waitForTaskAndSpinner = combineLatest([
+      emitOnObsEnd,
+      this.hideSpinner$,
+    ]);
     return of(null).pipe(
       tap(() => {
         this.taskStartSubject.next();
       }),
-      concatMap(() =>
-        combineLatest([
-          obs$.pipe(
-            tap(() => {
-              this.taskEndSubject.next();
-            })
-          ),
-          this.hideSpinner$,
-        ])
-      ),
+      concatMap(() => waitForTaskAndSpinner),
       map(([data, _]) => data)
     );
   }

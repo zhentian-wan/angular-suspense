@@ -54,3 +54,8 @@
 ## v1.3.1 - 17.05.2020
 
 - Fix data and skeleton showing at the same time
+
+## v1.3.2 - 19.05.2020
+
+- UnSubscribe the spinner on destroy
+- Reset timer to zero on Init

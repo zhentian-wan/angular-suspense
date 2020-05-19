@@ -12,7 +12,7 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
     CommonModule,
     //NgxLoadingSkeletonModule,
     NgxLoadingSkeletonModule.forRoot({
-      animationSpeed: "2s",
+      animationSpeed: "1s",
       busyDelayMs: 300,
       busyMinDurationMs: 3000,
       theme: {

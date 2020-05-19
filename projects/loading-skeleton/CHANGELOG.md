@@ -59,3 +59,7 @@
 
 - UnSubscribe the spinner on destroy
 - Reset timer to zero on Init
+
+## 1.3.3 - 19.05.2020
+
+- Using AsyncSubject for hideSpinner to resolve source observable using `of`

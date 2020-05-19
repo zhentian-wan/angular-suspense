@@ -1,5 +1,6 @@
 import { Injectable, Inject, Optional, OnDestroy } from "@angular/core";
 import {
+  AsyncSubject,
   BehaviorSubject,
   Observable,
   of,
@@ -44,7 +45,7 @@ export class LoadingSkeletonService implements OnDestroy {
   private taskStart$ = this.taskStartSubject.asObservable();
   private taskEndSubject = new Subject();
   private taskEnd$ = this.taskEndSubject.asObservable();
-  private hideSpinnerSubject = new Subject();
+  private hideSpinnerSubject = new AsyncSubject();
   private hideSpinner$ = this.hideSpinnerSubject.asObservable();
 
   // according to Facebook UI team research, it would be a better
@@ -164,6 +165,7 @@ export class LoadingSkeletonService implements OnDestroy {
       tap(() => {
         this.hide();
         this.hideSpinnerSubject.next(true);
+        this.hideSpinnerSubject.complete();
       })
     );
     return showSpinner.pipe(takeUntil(hideSpinner));

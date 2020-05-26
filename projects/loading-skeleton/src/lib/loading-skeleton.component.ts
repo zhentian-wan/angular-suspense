@@ -37,6 +37,8 @@ export class LoadingSkeletonComponent implements OnInit {
   }
   @Input() isVisible: boolean = false;
 
+  @Input() service: LoadingSkeletonService;
+
   // For debug
   // in browser: ng.getComponent($0).log()
   @Input() log = () =>
@@ -50,10 +52,14 @@ export class LoadingSkeletonComponent implements OnInit {
   constructor(private loadingService: LoadingSkeletonService) {}
 
   ngOnInit(): void {
+    if (this.service) {
+      this.loading$ = this.service.loading$;
+      return;
+    } /*
     this.loading$ = this.loadingService.loading$.pipe(
       startWith(false),
       delay(0)
-    );
+    );*/
   }
 
   get loadingContext() {

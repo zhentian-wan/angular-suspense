@@ -14,9 +14,11 @@ import { LoadingListComponent } from "./template-components/loading-list/loading
 import { LoadingTextComponent } from "./template-components/loading-text/loading-text.component";
 import { LoadingTextareaComponent } from "./template-components/loading-textarea/loading-textarea.component";
 import { LoadingBulletComponent } from "./template-components/loading-bullet/loading-bullet.component";
+import { LoadingSkeletonListComponent } from "./loading-list/loading-skeleton-list.component";
 
 @NgModule({
   declarations: [
+    LoadingSkeletonListComponent,
     LoadingSkeletonComponent,
     LoadingPlaceholderComponent,
     LoadingBulletComponent,
@@ -29,6 +31,7 @@ import { LoadingBulletComponent } from "./template-components/loading-bullet/loa
   ],
   imports: [CommonModule],
   exports: [
+    LoadingSkeletonListComponent,
     LoadingSkeletonComponent,
     LoadingPlaceholderComponent,
     LoadingButtonComponent,

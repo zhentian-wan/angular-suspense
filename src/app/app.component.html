@@ -40,11 +40,14 @@
         ></loading-textarea>
       </div>
     </div>
-    <div class="row">
-      <loading-button></loading-button>
-      <loading-button></loading-button>
-    </div>
   </section>
+</ng-template>
+
+<ng-template #exampleTpl2 let-config>
+  <div class="row">
+    <loading-button></loading-button>
+    <loading-button></loading-button>
+  </div>
 </ng-template>
 
 <p>
@@ -62,12 +65,25 @@
   {{ data$ | async }}
 </pre>
 
-<loading-skeleton
-  [theme]="theme"
-  [mode]="themeMode"
-  [outlet]="exampleTpl"
-  ariaLabel="Loading the page... please wait"
-></loading-skeleton>
+<pre>
+  {{ data2$ | async }}
+</pre>
+
+<loading-skeleton-list>
+  <loading-skeleton
+    [service]="l1"
+    [theme]="theme"
+    [mode]="themeMode"
+    [outlet]="exampleTpl"
+    ariaLabel="Loading the page... please wait"
+  ></loading-skeleton>
+
+  <loading-skeleton
+    [service]="l2"
+    [outlet]="exampleTpl2"
+    ariaLabel="Loading the page..."
+  ></loading-skeleton>
+</loading-skeleton-list>
 
 <hr />
 

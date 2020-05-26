@@ -1,7 +1,12 @@
 import { Component } from "@angular/core";
-import { LoadingSkeletonService } from "projects/loading-skeleton/src/public-api";
+import {
+  LoadingSkeletonService,
+  ILoadingConfig,
+  LOADING_DEFUALT_CONFIG,
+} from "projects/loading-skeleton/src/public-api";
 import { timer } from "rxjs";
 import { mapTo } from "rxjs/operators";
+import { loadingServiceProvider } from "./loading.service.provider";
 
 @Component({
   selector: "app-root",
@@ -11,6 +16,7 @@ import { mapTo } from "rxjs/operators";
 })
 export class AppComponent {
   data$;
+  data2$;
   title = "libs-workspaces";
   isDark: boolean = false;
   isVisible;
@@ -23,16 +29,20 @@ export class AppComponent {
     },
   };
   themeMode = "light";
+
+  l1 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
+  l2 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
   constructor(private loadingService: LoadingSkeletonService) {
+    console.log(this.l1);
+    console.log(this.l2);
     this.data$ = timer(1500).pipe(
-      this.loadingService.showLoadingStatus(),
-      mapTo("data coming back")
+      this.l1.showLoadingStatus(),
+      mapTo("data coming back 1500")
     );
 
-    /*
-    this.data$ = this.loadingService.showingFor(
-      timer(4000).pipe(mapTo("data coming back"))
-    );*/
+    this.data2$ = this.l2.showingFor(
+      timer(4000).pipe(mapTo("data coming back 4000"))
+    );
 
     this.isVisible = false;
   }

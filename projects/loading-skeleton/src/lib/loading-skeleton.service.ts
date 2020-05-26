@@ -45,7 +45,7 @@ export class LoadingSkeletonService implements OnDestroy {
   private taskStart$ = this.taskStartSubject.asObservable();
   private taskEndSubject = new Subject();
   private taskEnd$ = this.taskEndSubject.asObservable();
-  private hideSpinnerSubject = new AsyncSubject();
+  hideSpinnerSubject = new AsyncSubject();
   private hideSpinner$ = this.hideSpinnerSubject.asObservable();
 
   // according to Facebook UI team research, it would be a better

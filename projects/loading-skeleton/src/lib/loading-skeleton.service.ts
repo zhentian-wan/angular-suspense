@@ -1,26 +1,25 @@
 import { Injectable, Inject, Optional, OnDestroy } from "@angular/core";
 import {
-  AsyncSubject,
   BehaviorSubject,
   Observable,
-  of,
-  combineLatest,
-  timer,
-  merge,
   Subject,
   Subscriber,
+  combineLatest,
+  merge,
+  of,
+  timer,
   Subscription,
 } from "rxjs";
 import {
   concatMap,
-  tap,
-  map,
-  mapTo,
-  takeUntil,
-  skip,
   filter,
-  switchMap,
+  tap,
+  mapTo,
+  skip,
   startWith,
+  switchMap,
+  takeUntil,
+  shareReplay,
 } from "rxjs/operators";
 import {
   LOADING_CONFIG_TOKEN,
@@ -45,34 +44,34 @@ export class LoadingSkeletonService implements OnDestroy {
   private taskStart$ = this.taskStartSubject.asObservable();
   private taskEndSubject = new Subject();
   private taskEnd$ = this.taskEndSubject.asObservable();
-  hideSpinnerSubject = new AsyncSubject();
-  private hideSpinner$ = this.hideSpinnerSubject.asObservable();
 
   // according to Facebook UI team research, it would be a better
   // user experience to show spinner a little bit longer than
   // when user has a high internet speed.
   // Avoid flashing screen
-  private busyMinDurationTimer = timer(
-    this.config.busyMinDurationMs + this.config.busyDelayMs
-  );
-  private busyDelayTimer = timer(this.config.busyDelayMs);
+  private busyMinDurationTimer;
+  private busyDelayTimer;
 
-  private subscription: Subscription;
+  private sub: Subscription;
+
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
     private userConfig: ILoadingConfig
-  ) {
-    if (this.userConfig.duration) {
-      console.warn(
-        '[NgxLoadingSkeletonModule.forRoot]: "duration" will be deprecated in the future, please use "animationSpeed" instead'
-      );
-    }
-    this.subscription = this.controller().subscribe();
-  }
+  ) {}
 
   ngOnDestroy() {
-    this.subscription.unsubscribe();
+    this.sub.unsubscribe();
+  }
+
+  set busyTimer({ busyDelayMs, busyMinDurationMs }) {
+    if (typeof busyDelayMs === "number") {
+      this.userConfig.busyDelayMs = busyDelayMs;
+    }
+
+    if (typeof busyMinDurationMs === "number") {
+      this.userConfig.busyMinDurationMs = busyMinDurationMs;
+    }
   }
 
   get config() {
@@ -84,12 +83,6 @@ export class LoadingSkeletonService implements OnDestroy {
   }
 
   get duration() {
-    const duartion = this.userConfig.duration;
-
-    if (duartion) {
-      return duartion;
-    }
-
     return this.config.animationSpeed;
   }
 
@@ -106,6 +99,10 @@ export class LoadingSkeletonService implements OnDestroy {
   }
 
   private controller() {
+    this.busyMinDurationTimer = timer(
+      this.config.busyMinDurationMs + this.config.busyDelayMs
+    );
+    this.busyDelayTimer = timer(this.config.busyDelayMs);
     const busyDelayTimerStart = this.taskStart$.pipe(
       switchMap(() => this.busyDelayTimer)
     );
@@ -116,7 +113,7 @@ export class LoadingSkeletonService implements OnDestroy {
     const emitOnDelayTimerEnd = busyDelayTimerEnd.pipe(mapTo(-1));
     const emitOnMinDurationEnd = this.busyMinDurationTimer.pipe(mapTo(-1));
 
-    ////////////// Show the loading skeleton /////////////////
+    // Start loading skeleton
     const raceBetweenTaskAndDelay = combineLatest([
       emitOnTaskEnd.pipe(startWith(null)),
       emitOnDelayTimerEnd.pipe(startWith(null)),
@@ -139,7 +136,7 @@ export class LoadingSkeletonService implements OnDestroy {
       })
     );
 
-    /////////////// hide loading skeleton ///////////////
+    // hide loading skeleton
     const raceBetweenTaskAndMinDuration = combineLatest([
       emitOnTaskEnd.pipe(startWith(null)),
       emitOnMinDurationEnd.pipe(startWith(null)),
@@ -164,14 +161,16 @@ export class LoadingSkeletonService implements OnDestroy {
     ).pipe(
       tap(() => {
         this.hide();
-        this.hideSpinnerSubject.next(true);
-        this.hideSpinnerSubject.complete();
       })
     );
     return showSpinner.pipe(takeUntil(hideSpinner));
   }
 
   showLoadingStatus() {
+    if (this.sub && typeof this.sub.unsubscribe === "function") {
+      this.sub.unsubscribe();
+    }
+    this.sub = this.controller().subscribe();
     return (source) => {
       return new Observable((subscriber: Subscriber<any>) => {
         const emitOnObsEnd = source.pipe(
@@ -179,17 +178,13 @@ export class LoadingSkeletonService implements OnDestroy {
             this.taskEndSubject.next();
           })
         );
-        const waitForTaskAndSpinner = combineLatest([
-          emitOnObsEnd,
-          this.hideSpinner$,
-        ]);
         const sub = of(null)
           .pipe(
             tap(() => {
               this.taskStartSubject.next();
             }),
-            concatMap(() => waitForTaskAndSpinner),
-            map(([data, _]) => data)
+            concatMap(() => emitOnObsEnd),
+            shareReplay(1)
           )
           .subscribe(subscriber);
 
@@ -201,21 +196,21 @@ export class LoadingSkeletonService implements OnDestroy {
   }
 
   showingFor<T>(obs$: Observable<T>): Observable<T> {
+    if (this.sub && typeof this.sub.unsubscribe === "function") {
+      this.sub.unsubscribe();
+    }
+    this.sub = this.controller().subscribe();
     const emitOnObsEnd = obs$.pipe(
       tap(() => {
         this.taskEndSubject.next();
       })
     );
-    const waitForTaskAndSpinner = combineLatest([
-      emitOnObsEnd,
-      this.hideSpinner$,
-    ]);
     return of(null).pipe(
       tap(() => {
         this.taskStartSubject.next();
       }),
-      concatMap(() => waitForTaskAndSpinner),
-      map(([data, _]) => data)
+      concatMap(() => emitOnObsEnd),
+      shareReplay(1)
     );
   }
 

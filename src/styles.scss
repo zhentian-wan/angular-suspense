@@ -1,1 +1,84 @@
 /* You can add global styles to this file, and also import other style files */
+
+.row {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-1 {
+  flex: 1;
+}
+.flex-2 {
+  flex: 2;
+}
+.flex-3 {
+  flex: 3;
+}
+.flex-4 {
+  flex: 5;
+}
+.flex-5 {
+  flex: 5;
+}
+.flex-6 {
+  flex: 6;
+}
+.flex-7 {
+  flex: 7;
+}
+.flex-8 {
+  flex: 8;
+}
+.flex-9 {
+  flex: 9;
+}
+.flex-10 {
+  flex: 10;
+}
+.flex-11 {
+  flex: 11;
+}
+.flex-12 {
+  flex: 12;
+}
+
+code {
+  font-family: Consolas, "courier new";
+  color: crimson;
+  background-color: #f1f1f1;
+  padding: 2px;
+  font-size: 105%;
+  margin: 2px;
+  display: inline-block;
+  margin-top: 16px;
+}
+
+.black {
+  color: black;
+}
+
+.tag {
+  padding: 0;
+  margin: 0;
+  color: blueviolet;
+}
+
+.code {
+  font-size: 1.75rem;
+}
+
+.code_highlight {
+  background-color: yellow;
+}
+
+.lgf {
+  font-size: 1.5rem;
+}
+
+.mg10 {
+  margin: 10px;
+}

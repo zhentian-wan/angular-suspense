@@ -63,3 +63,13 @@
 ## 1.3.3 - 19.05.2020
 
 - Using AsyncSubject for hideSpinner to resolve source observable using `of`
+
+## 2.0.0
+
+- Fix when retrying, skeleton not showing
+- Add transition when toggle from skeleton to content
+- Remove content projection approach
+- Replace content project to show the data
+- Added `loading-skeleton-list` with `revealOrder: together, forwards, backwards`
+- Removed `loading-image` & `loading-textarea`
+- Added export `loading-bullet`

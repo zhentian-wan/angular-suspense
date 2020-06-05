@@ -18,20 +18,20 @@ export interface ILoadingConfig {
 }
 
 export const LOADING_DEFUALT_CONFIG: ILoadingConfig = {
+  busyMinDurationMs: 0,
+  busyDelayMs: 0,
   showContent: true,
   animationSpeed: "0.9s",
   theme: {
     light: {
-      backgroundColor: `rgb(227, 227, 227)`,
-      fontColor: `rgba(0, 0, 0, 0.7)`,
+      backgroundColor: `rgba(0, 0, 0, 0.2)`,
+      fontColor: `black`,
     },
     dark: {
-      backgroundColor: `rgba(0, 0, 0, 0.7)`,
-      fontColor: `rgb(227, 227, 227)`,
+      backgroundColor: `rgba(255, 255, 255, 0.2)`,
+      fontColor: `white`,
     },
   },
-  busyMinDurationMs: 0,
-  busyDelayMs: 0,
 };
 export const LOADING_CONFIG_TOKEN = new InjectionToken<ILoadingConfig>(
   "LOADING_CONFIG_TOKEN"

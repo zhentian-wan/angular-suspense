@@ -1,6 +1,7 @@
 import { NgModule, ModuleWithProviders } from "@angular/core";
 import { LoadingSkeletonComponent } from "./loading-skeleton.component";
 import { CommonModule } from "@angular/common";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   LOADING_CONFIG_TOKEN,
   LOADING_DEFUALT_CONFIG,
@@ -9,12 +10,10 @@ import {
 import { LoadingPlaceholderComponent } from "./loading-placeholder/loading-placeholder.component";
 import { LoadingButtonComponent } from "./template-components/loading-button/loading-button.component";
 import { LoadingHeadlineComponent } from "./template-components/loading-headline/loading-headline.component";
-import { LoadingImageComponent } from "./template-components/loading-image/loading-image.component";
 import { LoadingListComponent } from "./template-components/loading-list/loading-list.component";
 import { LoadingTextComponent } from "./template-components/loading-text/loading-text.component";
-import { LoadingTextareaComponent } from "./template-components/loading-textarea/loading-textarea.component";
 import { LoadingBulletComponent } from "./template-components/loading-bullet/loading-bullet.component";
-import { LoadingSkeletonListComponent } from "./loading-list/loading-skeleton-list.component";
+import { LoadingSkeletonListComponent } from "./loading-skeleton-list/loading-skeleton-list.component";
 
 @NgModule({
   declarations: [
@@ -24,22 +23,19 @@ import { LoadingSkeletonListComponent } from "./loading-list/loading-skeleton-li
     LoadingBulletComponent,
     LoadingButtonComponent,
     LoadingHeadlineComponent,
-    LoadingImageComponent,
     LoadingListComponent,
     LoadingTextComponent,
-    LoadingTextareaComponent,
   ],
-  imports: [CommonModule],
+  imports: [BrowserAnimationsModule, CommonModule],
   exports: [
     LoadingSkeletonListComponent,
     LoadingSkeletonComponent,
     LoadingPlaceholderComponent,
+    LoadingBulletComponent,
     LoadingButtonComponent,
     LoadingHeadlineComponent,
-    LoadingImageComponent,
     LoadingListComponent,
     LoadingTextComponent,
-    LoadingTextareaComponent,
   ],
   providers: [
     {

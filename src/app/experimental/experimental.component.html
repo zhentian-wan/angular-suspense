@@ -1,0 +1,165 @@
+<ng-template #exampleTpl3>
+  <loading-headline size="s"></loading-headline>
+  <loading-list count="2" size="l"></loading-list>
+</ng-template>
+
+<h2>Select revealOrder:</h2>
+<p>
+  <button class="lgf mg10" (click)="reload()">Any</button>
+  <button class="lgf mg10" (click)="together(list)">Together</button>
+  <button class="lgf mg10" (click)="forwards(list)">
+    forwards
+  </button>
+  <button class="lgf mg10" (click)="backwrads(list)">
+    backwards
+  </button>
+</p>
+
+<p>
+  When multiple components need to fetch data, this data may arrive in an
+  unpredictable order.
+</p>
+
+<p *ngIf="model === 'together'">
+  <b>{{ model }}</b
+  >: Library will reveals all of them when they’re ready instead of one by one.
+</p>
+
+<p *ngIf="model === 'forwards'">
+  <b>{{ model }}</b
+  >: Library will not show an item in the list until <b>previous</b> items have
+  been displayed.
+</p>
+
+<p *ngIf="model === 'backwards'">
+  <b>{{ model }}</b
+  >: Library will not show an item in the list until <b>below</b> items have
+  been displayed.
+</p>
+
+<section class="row">
+  <div class="flex-8">
+    <loading-skeleton-list [revealOrder]="model" #list="list">
+      <loading-skeleton
+        [bind]="l1"
+        [fallback]="exampleTpl3"
+        ariaLabel="Loading the page... please wait"
+      >
+        <section
+          class="mg10"
+          *ngIf="dataList1$ | async as content"
+          style="background-color: honeydew;"
+        >
+          <h3>{{ content.head }}</h3>
+          <div class="row">
+            <div class="flex-12">
+              <ul>
+                <li class="listItem" *ngFor="let li of content.data">
+                  {{ li }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </loading-skeleton>
+
+      <loading-skeleton
+        [bind]="l2"
+        [fallback]="exampleTpl3"
+        ariaLabel="Loading the page... please wait"
+      >
+        <section
+          class="mg10"
+          *ngIf="dataList2$ | async as content"
+          style="background-color: blanchedalmond;"
+        >
+          <h3>{{ content.head }}</h3>
+          <div class="row">
+            <div class="flex-12">
+              <ul>
+                <li class="listItem" *ngFor="let li of content.data">
+                  {{ li }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </loading-skeleton>
+
+      <loading-skeleton
+        [bind]="l3"
+        [fallback]="exampleTpl3"
+        ariaLabel="Loading the page... please wait"
+      >
+        <section
+          class="mg10"
+          *ngIf="dataList3$ | async as content"
+          style="background-color: lightcoral;"
+        >
+          <h3>{{ content.head }}</h3>
+          <div class="row">
+            <div class="flex-12">
+              <ul>
+                <li class="listItem" *ngFor="let li of content.data">
+                  {{ li }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </loading-skeleton>
+
+      <loading-skeleton
+        [bind]="l4"
+        [fallback]="exampleTpl3"
+        ariaLabel="Loading the page... please wait"
+      >
+        <section
+          class="mg10"
+          *ngIf="dataList4$ | async as content"
+          style="background-color: burlywood;"
+        >
+          <h3>{{ content.head }}</h3>
+          <div class="row">
+            <div class="flex-12">
+              <ul>
+                <li class="listItem" *ngFor="let li of content.data">
+                  {{ li }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </loading-skeleton>
+    </loading-skeleton-list>
+  </div>
+
+  <div class="flex-4">
+    <pre class="code">
+      <code>
+&lt;loading-skeleton-list <span class="code_highlight">revealOrder="{{model}}"</span>&gt;
+  <span class="tag">&lt;loading-skeleton
+    [bind]=&quot;loadingService1&quot;
+    [fallback]=&quot;tpl2&quot;
+  &gt;</span>
+      <span class="black">&lt;YOUR_COMPONENT1 /&gt;</span>
+  <span class="tag">&lt;/loading-skeleton&gt;</span>
+
+  <span class="tag">&lt;loading-skeleton
+    [bind]=&quot;loadingService2&quot;
+    [fallback]=&quot;tpl2&quot;
+  &gt;</span>
+      <span class="black">&lt;YOUR_COMPONENT2 /&gt;</span>
+  <span class="tag">&lt;/loading-skeleton&gt;</span>
+&lt;/loading-skeleton-list&gt;
+      </code>
+    </pre>
+    <p style="text-align: center;">
+      <a
+        target="_blank"
+        href="https://reactjs.org/docs/concurrent-mode-reference.html#suspenselist"
+        >React Suspense</a
+      >
+    </p>
+  </div>
+</section>

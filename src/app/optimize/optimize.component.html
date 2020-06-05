@@ -1,0 +1,56 @@
+<ng-template #exampleTpl2 let-config>
+  <section>
+    <div class="row">
+      <div class="flex-12">
+        <loading-headline size="m"> </loading-headline>
+        <loading-list count="8" size="l"> </loading-list>
+      </div>
+    </div>
+  </section>
+</ng-template>
+
+<p>
+  <button class="lgf mg10" (click)="initRequest(100)">100ms</button>
+  <button class="lgf mg10" (click)="initRequest(300)">300ms</button>
+  <button class="lgf mg10" (click)="initRequest(500)">500ms</button>
+  <button class="lgf mg10" (click)="initRequest(2000)">2000ms</button>
+</p>
+
+<section class="row">
+  <div class="flex-8">
+    <loading-skeleton
+      [fallback]="exampleTpl2"
+      ariaLabel="Loading the page... please wait"
+    >
+      <section *ngIf="data$ | async as data">
+        <div class="row">
+          <div class="flex-12">
+            <ul>
+              <li *ngFor="let li of data.content">{{ li.content }}</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </loading-skeleton>
+  </div>
+  <div class="flex-4">
+    <h2>
+      Timing configuration
+    </h2>
+    <div class="lgf">
+      <label for="busyDelayMs">
+        <b>busyDelayMs:</b>
+        <input id="busyDelayMs" type="number" [(ngModel)]="busyDelayMs" />
+      </label>
+      <p>Under {{ busyDelayMs }}ms, skeleton doesn't show</p>
+
+      <label for="busyMinDurationMs">
+        <b>busyMinDurationMs:</b>
+        <input type="number" [(ngModel)]="busyMinDurationMs" />
+      </label>
+      <p>If show skeleton, showing at least {{ busyMinDurationMs }}ms.</p>
+    </div>
+    <button class="lgf mg10" (click)="busyTimer()">Save</button>
+    <button class="lgf mg10" (click)="reset()">Reset</button>
+  </div>
+</section>

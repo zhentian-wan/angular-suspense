@@ -24,7 +24,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
 export class LoadingSkeletonComponent implements OnInit {
   _theme: ILoadingConfigTheme;
   _mode: "light" | "dark" = "light";
-  @Input() outlet: TemplateRef<any>;
+  @Input() fallback: TemplateRef<any>;
   @Input() ariaLabel: string = "Loading...";
   @Input() set theme(val: ILoadingConfigTheme) {
     if (val.dark && val.light) {

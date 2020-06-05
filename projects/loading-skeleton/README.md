@@ -1,6 +1,6 @@
 # NgxLoadingSkeleton
 
-## [DEMO](https://codesandbox.io/s/hungry-flower-0jwv5?fontsize=14&hidenavigation=1&theme=dark)
+## [DEMO](https://codesandbox.io/s/ngx-loading-skeleton-zlcwr)
 
 ## Install the library
 
@@ -17,7 +17,7 @@ imports: [NgxLoadingSkeletonModule];
 Once you include the module, you will get following list of components you can use:
 
 ```html
-    <loading-skeleton [outlet]="TempalteRef"></loading-skeleton>
+    <loading-skeleton [fallback]="TempalteRef"></loading-skeleton>
     <loading-placeholder [size]="s|m|l|f|small|medium|large|full" [type]="text|headline"></loading-placeholde>
     <loading-text [size]="s|m|l|f|small|medium|large|full"></loading-text>
     <loading-headline [size]="s|m|l|f|small|medium|large|full">
@@ -36,9 +36,9 @@ LoadingSkeletonService;
 
 ### `<loading-skeleton>`
 
-Using `[outlet]` with `<ng-template></ng-template>`
+Using `[fallback]` with `<ng-template></ng-template>`
 
-`<loading-skeleton [outlet]="tempalteRef"><YOUR_CONTENT_FROM_SERVER /></loading-skeleton>` will use the template you passed in.
+`<loading-skeleton [fallback]="tempalteRef"><YOUR_CONTENT_FROM_SERVER /></loading-skeleton>` will use the template you passed in.
 
 It using `this.loadingService.showingFor<T>(obs$ : Observable<T>): Observable<T>`, dynamically control `loading-skeleton` component show / hide. It is more reactive approach.
 
@@ -82,7 +82,7 @@ export class CategoriesComponent implements OnInit {
 </ng-template>
 <main>
   <section>
-    <loading-skeleton [outlet]="tmp">
+    <loading-skeleton [fallback]="tmp">
       <!-- Your content to be loaded below -->
       <div *ngIf="categories$ | asnyc as categories"></div>
     </loading-skeleton>

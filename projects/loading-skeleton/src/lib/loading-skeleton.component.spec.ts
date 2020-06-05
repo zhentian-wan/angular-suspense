@@ -2,7 +2,7 @@ import {
   async,
   ComponentFixture,
   TestBed,
-  fakeAsync
+  fakeAsync,
 } from "@angular/core/testing";
 
 import { LoadingSkeletonComponent } from "./loading-skeleton.component";
@@ -14,14 +14,14 @@ import { By } from "@angular/platform-browser";
 
 const theme = {
   light: { backgroundColor: "grey", fontColor: "black" },
-  dark: { backgroundColor: "black", fontColor: "white" }
+  dark: { backgroundColor: "black", fontColor: "white" },
 };
 
 @Component({
   template: `
     <ng-template #loadingTmp><p>loading...</p></ng-template>
-    <loading-skeleton [outlet]="loadingTmp"></loading-skeleton>
-  `
+    <loading-skeleton [fallback]="loadingTmp"></loading-skeleton>
+  `,
 })
 class WrapperComponent {
   @ViewChild(LoadingSkeletonComponent)
@@ -34,7 +34,7 @@ let loadingServiceSpy = {
   get config() {
     return { showContent: false, theme };
   },
-  changeMode() {}
+  changeMode() {},
 };
 
 describe("LoadingSkeletonComponent", () => {
@@ -48,8 +48,8 @@ describe("LoadingSkeletonComponent", () => {
     TestBed.configureTestingModule({
       declarations: [WrapperComponent, LoadingSkeletonComponent],
       providers: [
-        { provide: LoadingSkeletonService, useValue: loadingServiceSpy }
-      ]
+        { provide: LoadingSkeletonService, useValue: loadingServiceSpy },
+      ],
     }).compileComponents();
   }));
 

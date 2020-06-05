@@ -73,3 +73,4 @@
 - Added `loading-skeleton-list` with `revealOrder: together, forwards, backwards`
 - Removed `loading-image` & `loading-textarea`
 - Added export `loading-bullet`
+- rename `loading-skeleton` component's Input `outlet` to `fallback`

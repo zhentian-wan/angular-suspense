@@ -1,0 +1,94 @@
+<p>
+  <button (click)="toggleDark()">Toggle Dark: global: {{ isDark }}</button>
+  <button (click)="cmpToggleMode()">
+    Toggle Dark: component: {{ themeMode }}
+  </button>
+</p>
+
+<section
+  [style.color]="isDark ? 'white' : 'black'"
+  [style.background]="isDark ? '#333' : 'rgba(255,255,255,0.87)'"
+>
+  <h2>Available components</h2>
+  <h3>loading-text</h3>
+  <code>
+    &lt;loading-text size=&quot;s&quot;&gt;&lt;/loading-text&gt;
+  </code>
+  <loading-text size="s" [theme]="theme" [mode]="themeMode"></loading-text>
+  <code>
+    &lt;loading-text size=&quot;m|medium&quot;&gt;&lt;/loading-text&gt;
+  </code>
+  <loading-text size="m"></loading-text>
+  <code>
+    &lt;loading-text size=&quot;l|large&quot;&gt;&lt;/loading-text&gt;
+  </code>
+  <loading-text size="l"></loading-text>
+  <code>
+    &lt;loading-text size=&quot;f|full&quot;&gt;&lt;/loading-text&gt;
+  </code>
+  <loading-text size="f"></loading-text>
+
+  <h3>loading-headline</h3>
+  <code>
+    &lt;loading-headline size=&quot;s|small&quot;&gt;&lt;/loading-headline&gt;
+  </code>
+  <loading-headline size="s"></loading-headline>
+  <code>
+    &lt;loading-headline size=&quot;m|medium&quot;&gt;&lt;/loading-headline&gt;
+  </code>
+  <loading-headline size="m"></loading-headline>
+  <code>
+    &lt;loading-headline size=&quot;l|large&quot;&gt;&lt;/loading-headline&gt;
+  </code>
+  <loading-headline size="l"></loading-headline>
+  <code>
+    &lt;loading-headline size=&quot;f|full&quot;&gt;&lt;/loading-headline&gt;
+  </code>
+  <loading-headline size="f"></loading-headline>
+  <h3>loading-bullet</h3>
+  <code>
+    &lt;loading-bullet&gt;&lt;/loading-bullet&gt;
+  </code>
+  <loading-bullet></loading-bullet>
+
+  <h3>loading-list</h3>
+  <code>
+    &lt;loading-list count=&quot;3&quot;
+    size=&quot;m&quot;&gt;&lt;/loading-list&gt;
+  </code>
+  <loading-list count="3" size="m"></loading-list>
+  <h3>loading-button</h3>
+  <code>
+    &lt;loading-button&gt;&lt;/loading-button&gt;
+  </code>
+  <loading-button></loading-button>
+
+  <h2>Customzie your own loading placeholder</h2>
+  <h3>loading-placeholder</h3>
+  <code>
+    &lt;loading-placeholder&gt;&lt;/loading-placeholder&gt;
+  </code>
+  <loading-placeholder></loading-placeholder>
+  <p>
+    You can provide any css style to styling loading-placeholder component
+  </p>
+
+  <h4>Make a reactange</h4>
+  <code>&lt;loading-placeholder style=&quot;width: 150px; height: 150px;&quot;&gt;&lt;/loading-placeholder&gt;</code>
+  <loading-placeholder style="width: 150px; height: 150px;"></loading-placeholder>
+
+  <h4>Make a circle</h4>
+  <code>
+    &lt;loading-placeholder style=&quot;width: 150px; height: 150px; border-radius: 50%;&quot;&gt;&lt;/loading-placeholder&gt;
+  </code>
+  <loading-placeholder style="width: 150px; height: 150px; border-radius: 50%;"></loading-placeholder>
+
+  <h4>Make customize shape</h4>
+  <code>
+    &lt;loading-placeholder style=&quot;width: 400px; height: 200px;
+    border-radius: 0 0 30px 30px;&quot;&gt;&lt;/loading-placeholder&gt;
+  </code>
+  <loading-placeholder
+    style="width: 400px; height: 200px; border-radius: 0 0 30px 30px;"
+  ></loading-placeholder>
+</section>

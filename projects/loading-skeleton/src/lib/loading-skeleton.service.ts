@@ -61,7 +61,9 @@ export class LoadingSkeletonService implements OnDestroy {
   ) {}
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if (this.sub && typeof this.sub.unsubscribe === "function") {
+      this.sub.unsubscribe();
+    }
   }
 
   set busyTimer({ busyDelayMs, busyMinDurationMs }) {

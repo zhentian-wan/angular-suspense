@@ -4,12 +4,10 @@ import {
   Input,
   ElementRef,
   AfterViewInit,
-  Renderer2,
   ViewEncapsulation,
 } from "@angular/core";
 import { LoadingSkeletonService } from "../loading-skeleton.service";
 import { ITheme } from "../loading-skeleton.config";
-import { combineLatest } from "rxjs";
 
 @Component({
   selector: "loading-placeholder",
@@ -27,7 +25,6 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   backgroundColor: string;
   fontColor: string;
   constructor(
-    private render: Renderer2,
     private el: ElementRef,
     public loadingService: LoadingSkeletonService
   ) {}
@@ -64,10 +61,9 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.render.setAttribute(
-      this.el.nativeElement,
-      "style",
-      `--duration:${this.loadingService.duration}`
+    this.el.nativeElement.style.setProperty(
+      "--duration",
+      this.loadingService.duration
     );
   }
 

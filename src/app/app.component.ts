@@ -1,7 +1,5 @@
 import { Component } from "@angular/core";
 import { LoadingSkeletonService } from "projects/loading-skeleton/src/public-api";
-import { timer } from "rxjs";
-import { mapTo } from "rxjs/operators";
 
 @Component({
   selector: "app-root",
@@ -10,41 +8,12 @@ import { mapTo } from "rxjs/operators";
   providers: [LoadingSkeletonService],
 })
 export class AppComponent {
-  data$;
-  title = "libs-workspaces";
-  isDark: boolean = false;
-  isVisible;
-  theme = {
-    light: {
-      backgroundColor: "lightblue",
-    },
-    dark: {
-      backgroundColor: "darkblue",
-    },
-  };
-  themeMode = "light";
-  constructor(private loadingService: LoadingSkeletonService) {
-    this.data$ = timer(1500).pipe(
-      this.loadingService.showLoadingStatus(),
-      mapTo("data coming back")
-    );
+  title;
+  constructor() {}
 
-    /*
-    this.data$ = this.loadingService.showingFor(
-      timer(4000).pipe(mapTo("data coming back"))
-    );*/
-
-    this.isVisible = false;
-  }
-
-  ngOnInit() {}
-
-  toggleDark() {
-    this.isDark = !this.isDark;
-    this.loadingService.changeMode(this.isDark);
-  }
-
-  cmpToggleMode() {
-    this.themeMode = this.themeMode === "light" ? "dark" : "light";
+  ngOnInit() {
+    import("../../projects/loading-skeleton/package.json").then((pg) => {
+      this.title = `${pg.name} v${pg.version}`;
+    });
   }
 }

@@ -18,12 +18,11 @@ Once you include the module, you will get following list of components you can u
 
 ```html
     <loading-skeleton [outlet]="TempalteRef"></loading-skeleton>
-    <loading-placeholder [size]="s|m|l|f|small|medium|large|full" [type]="text|headline|image"></loading-placeholde>
+    <loading-placeholder [size]="s|m|l|f|small|medium|large|full" [type]="text|headline"></loading-placeholde>
     <loading-text [size]="s|m|l|f|small|medium|large|full"></loading-text>
     <loading-headline [size]="s|m|l|f|small|medium|large|full">
-    <loading-image>
     <loading-button>
-    <loading-textarea>
+    <loading-bullet>
     <loading-list [count]="number(default 3)" [size]="s|m(default)|l|f|small|medium|large|full" [bullet]="true(default)|false">
 ```
 
@@ -37,13 +36,13 @@ LoadingSkeletonService;
 
 ### `<loading-skeleton>`
 
-Two ways to using `<loading-skeleton>`.
+Using `[outlet]` with `<ng-template></ng-template>`
 
-1. Using `[outlet]` with `<ng-template></ng-template>`
+`<loading-skeleton [outlet]="tempalteRef"><YOUR_CONTENT_FROM_SERVER /></loading-skeleton>` will use the template you passed in.
 
-`<loading-skeleton [outlet]="tempalteRef"></loading-skeleton>` will use the template you passed in.
+It using `this.loadingService.showingFor<T>(obs$ : Observable<T>): Observable<T>`, dynamically control `loading-skeleton` component show / hide. It is more reactive approach.
 
-It using `this.loadingService.showingFor<T>(obs$ : Observable<T>): Observable: T`, dynamically control `loading-skeleton` component show / hide. It is more reactive approach.
+You can also use `this.loadingService.showLoadingStatus()`
 
 ```typescript
 @Component({
@@ -58,15 +57,22 @@ export class CategoriesComponent implements OnInit {
     private categoriesService: CategoriesService,
     private loadingService: LoadingSkeletonService
   ) {
+    // Type safe
     this.categories$ = this.loadingService.showingFor(
       this.categoriesService.getCategories()
     );
+
+    // or
+    // Side effect
+    this.categories$ = this.categoriesService
+      .getCategories()
+      .pipe(this.loadingService.showLoadingStatus());
   }
 }
 ```
 
 ```html
-<ng-template #tmp2>
+<ng-template #tmp>
   <loading-headline size="s"></loading-headline>
   <div class="column">
     <loading-headline size="m"></loading-headline>
@@ -76,32 +82,27 @@ export class CategoriesComponent implements OnInit {
 </ng-template>
 <main>
   <section>
-    <loading-skeleton [outlet]="tmp2"></loading-skeleton>
-    <!-- Your content to be loaded below -->
-    <div *ngIf="categories$ | asnyc as categories"></div>
+    <loading-skeleton [outlet]="tmp">
+      <!-- Your content to be loaded below -->
+      <div *ngIf="categories$ | asnyc as categories"></div>
+    </loading-skeleton>
   </section>
 </main>
 ```
 
-2. Using `content projection`
-
-```html
-<loading-skeleton>
-  <p>
-    <span>Loading...</span>
-  </p>
-</loading-skeleton>
-```
-
-without `[outlet]` will show the content from content projection
-
-#### `@Input() isVisible`
-
-If you are not comfortable with reactive (Angualar) approach, you can use `<loading-skeleton [isVisible]="boolean"></loading-skeleton>` to control it as well. This is more friendly to web component use cases, if you are not using Angular.
-
 #### `@Input() ariaLabel: string`
 
 Support for `aria-label`, with default settings `aria-busy=true` & `aria-hidden=false`
+
+---
+
+### `<loading-skeleton-list>`
+
+Let's say you have two or more `<loading-skeleton>` inside one page.
+
+Each of them resolve in different time, different orders, depends on network speed.
+
+To avoid some part of UI jumping up & down, you can use `<loading-skeleton-list revealOrder="together">` as a parent component to wrap all `<loading-skeleton>`s. Then all `<loading-skeleton>` will resolve at the same time.
 
 ---
 
@@ -112,9 +113,8 @@ This is basic buidling block for all the available components:
 ```html
 <loading-text [size]="s|m|l|f|small|medium|large|full"></loading-text>
 <loading-headline [size]="s|m|l|f|small|medium|large|full"></loading-headline>
-<loading-image></loading-image>
 <loading-button></loading-button>
-<loading-textarea></loading-textarea>
+<loading-bullet></loading-bullet>
 <loading-list
   [count]="number"
   [size]="s|m|l|f|small|medium|large|full"
@@ -127,59 +127,24 @@ Basiclly it means that if in the list doesn't contain such built-in component fo
 For example:
 
 ```html
-// loading-image.component.html
+// loading-bullet.component.html
 
-<loading-placeholder class="loading-placeholder__image"></loading-placeholder>
+<loading-placeholder class="loading-placeholder__bullet"></loading-placeholder>
 ```
 
 ```css
-.loading-placeholder__image {
+.loading-placeholder__bullet {
+  width: 16px;
+  height: 16px;
   border-radius: 50%;
-  height: 100px;
-  width: 100px;
 }
 ```
 
 ### `LoadingSkeletonService`
 
-#### `show() / hide()`
+#### `showingFor<T>(Obs$: Observable<T>): Observable<T>`
 
-```typescript
-this.loadingSerivce.show();
-await this.apiService.load();
-this.loadingService.hide();
-```
-
-#### `showLoadingStatus()` pipeable observalbe operator (Recommended)
-
-It trigger side effect for calling `show() / hide()`
-
-Example:
-
-```typescript
-@Component({
-  selector: "categories",
-  templateUrl: "./categories.component.html",
-  styleUrls: ["./categories.component.scss"],
-  providers: [LoadingSkeletonService],
-})
-export class CategoriesComponent implements OnInit {
-  categories$: Observable<Category[]>;
-  constructor(
-    private categoriesService: CategoriesService,
-    private loadingService: LoadingSkeletonService
-  ) {
-    this.categories$ = this.categoriesService
-      .getCategories()
-      .pipe(this.loadingService.showLoadingStatus());
-  }
-}
-```
-
-#### `showingFor<T>(Obs\$: Observable<T>): Observable<T>`
-
-You can pass in an observable which will finially complete, `showingFor` will trigger
-the side effect which control loading spinner ON / OFF.
+You can pass in an observable which will finially complete, `showingFor` will trigger the side effect which control loading spinner ON / OFF. Type friendly approach.
 
 **Example:**
 
@@ -203,29 +168,24 @@ export class CategoriesComponent implements OnInit {
 }
 ```
 
-[Note]: **Some observables will complete automaticlly, some are not.** If you want to use with `router`:
+#### `showLoadingStatus()`
+
+The same effect with `showingFor()`, just doesn't have type information.
 
 ```typescript
-// Bad
-// Following code will not work
-// Because this.router.paramMap will NOT COMPLETE automaticlly
+this.categories$ = this.categoriesService
+  .getCategories()
+  .pipe(this.loadingService.showLoadingStatus());
+```
 
-this.loadingService.showingFor(
-  this.router.paramMap.pipe(
-    map((paramMap) => paramMap.get("id")),
-    switchMap((id) => this.categoriesService.getCategoryById(id))
-  )
-);
+#### `show() / hide()`
 
-// Good
-// Categories Service use http call which will complete automatically
+If you wish to have normal control flow approach. You can use `show / hide`
 
-this.router.paramMap.pipe(
-  map((paramMap) => paramMap.get("id")),
-  switchMap((id) =>
-    this.loadingService.showingFor(this.categoriesService.getCategoryById(id))
-  )
-);
+```typescript
+this.loadingSerivce.show();
+await this.apiService.load();
+this.loadingService.hide();
 ```
 
 #### `changeMode(mode: 'light'|'dark'): void`

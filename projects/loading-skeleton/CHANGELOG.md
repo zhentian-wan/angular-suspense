@@ -74,3 +74,7 @@
 - Removed `loading-image` & `loading-textarea`
 - Added export `loading-bullet`
 - rename `loading-skeleton` component's Input `outlet` to `fallback`
+
+## 2.0.1
+
+- style fix for `loading-headline`

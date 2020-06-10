@@ -1,17 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import { mapTo } from 'rxjs/operators';
+import { mapTo } from "rxjs/operators";
 
-import { range } from 'lodash';
-import { timer } from 'rxjs';
+import { range } from "lodash";
+import { timer } from "rxjs";
 import {
   LoadingSkeletonService,
   LOADING_DEFUALT_CONFIG,
-} from 'projects/loading-skeleton/src/public-api';
+} from "projects/loading-skeleton/src/public-api";
 @Component({
-  selector: 'app-experimental',
-  templateUrl: './experimental.component.html',
-  styleUrls: ['./experimental.component.scss'],
+  selector: "app-experimental",
+  templateUrl: "./experimental.component.html",
+  styleUrls: ["./experimental.component.scss"],
 })
 export class ExperimentalComponent implements OnInit {
   dataList1$;
@@ -23,7 +23,7 @@ export class ExperimentalComponent implements OnInit {
   l2;
   l3;
   l4;
-  model = '*';
+  model = "*";
   constructor() {
     this.l1 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
     this.l2 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
@@ -41,30 +41,30 @@ export class ExperimentalComponent implements OnInit {
 
   getDataList() {
     const randomTime = () => this.random(500, 4000);
-    const randomSize = () => this.random(1, 4);
+    const randomSize = () => this.random(1, 3);
     this.dataList1$ = this.getAnyListData(
       randomTime(),
       randomSize(),
       this.l1,
-      'First'
+      "First"
     );
     this.dataList2$ = this.getAnyListData(
       randomTime(),
       randomSize(),
       this.l2,
-      'Seocnd'
+      "Seocnd"
     );
     this.dataList3$ = this.getAnyListData(
       randomTime(),
       randomSize(),
       this.l3,
-      'Third'
+      "Third"
     );
     this.dataList4$ = this.getAnyListData(
       randomTime(),
       randomSize(),
       this.l4,
-      'Fourth'
+      "Fourth"
     );
   }
 
@@ -72,38 +72,20 @@ export class ExperimentalComponent implements OnInit {
     if (ms < 1000) {
       return `${ms}ms`;
     } else {
-      const s = (ms / 1000).toFixed(1);
+      const s = (ms / 1000).toFixed(2);
       return `${s}s`;
     }
   }
 
   getAnyListData(time, count, service, order) {
-    const data = range(0, count).map((i) => `data ${i}`);
-    const head = `${order} list, reveal in ${this.formatTime(time)}`;
+    const data = range(0, count).map((i) => `${order} list data ${i + 1}`);
+    const head = `${order} list, resolve in ${this.formatTime(time)}`;
     return timer(time).pipe(mapTo({ data, head }), service.showLoadingStatus());
   }
 
-  together(listCmpRef) {
-    this.model = 'together';
+  reload(type, listCmpRef) {
+    this.model = type;
     this.getDataList();
-    listCmpRef.reload( this.model)
-    
-  }
-
-  forwards(listCmpRef) {
-    this.model = 'forwards';
-    this.getDataList();
-    listCmpRef.reload( this.model)
-  }
-
-  backwrads(listCmpRef) {
-    this.model = 'backwards';
-    this.getDataList();
-    listCmpRef.reload( this.model)
-  }
-
-  reload() {
-    this.model = '*';
-    this.getDataList();
+    listCmpRef.reload(this.model);
   }
 }

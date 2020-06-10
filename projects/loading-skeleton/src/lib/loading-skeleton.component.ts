@@ -7,6 +7,7 @@ import { trigger, transition, style, animate } from "@angular/animations";
 @Component({
   selector: "loading-skeleton",
   templateUrl: "./loading-skeleton.component.html",
+  styleUrls: ["./loading-skeleton.component.scss"],
   animations: [
     trigger("fadeIn", [
       transition(":enter", [

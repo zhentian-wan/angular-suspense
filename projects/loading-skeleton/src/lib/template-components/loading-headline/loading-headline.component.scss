@@ -1,24 +1,24 @@
 .loading-placeholder__headline {
-    height: 27px;
-    margin-bottom: 27px;
+  height: 27px;
+  margin-bottom: 27px;
 
-    &--small,
-    &--s {
-        width: 25%;
-    }
+  &--small,
+  &--s {
+    width: 25%;
+  }
 
-    &--medium,
-    &--m {
-        width: 50%;
-    }
+  &--medium,
+  &--m {
+    width: 50%;
+  }
 
-    &--large,
-    &--l {
-        width: 75%;
-    }
+  &--large,
+  &--l {
+    width: 75%;
+  }
 
-    &--full,
-    &--f {
-        width: 100%;
-    }
+  &--full,
+  &--f {
+    width: 95%;
+  }
 }

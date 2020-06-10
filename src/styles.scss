@@ -9,6 +9,10 @@
   flex-direction: column;
 }
 
+.wrap {
+  flex-wrap: wrap;
+}
+
 .flex-1 {
   flex: 1;
 }
@@ -68,7 +72,7 @@ code {
 }
 
 .code {
-  font-size: 1.75rem;
+  font-size: 1.1rem;
 }
 
 .code_highlight {

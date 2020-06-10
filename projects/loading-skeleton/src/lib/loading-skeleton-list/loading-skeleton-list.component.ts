@@ -158,7 +158,7 @@ export class LoadingSkeletonListComponent
   }
 
   private getFlushIndexes(checks) {
-    let indexesToFlush = [];
+    const indexesToFlush = [];
     for (let i = 0; i < checks.length; i++) {
       if (indexesToFlush.indexOf(i) > -1) {
         continue;

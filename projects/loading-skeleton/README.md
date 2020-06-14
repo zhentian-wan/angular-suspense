@@ -86,7 +86,7 @@ this.loadingService.changeMode("light"); // set light mode
 
 ## Configuration
 
-You can set `backgroundColor`, `fontColor` and `busyDelayMs`.
+You can set `backgroundColor`, `fontColor` and `animationSpeed`.
 
 ```typescript
 imports: [

@@ -13,13 +13,9 @@ export interface ILoadingConfig {
   theme?: ILoadingConfigTheme;
   duration?: string;
   animationSpeed?: string;
-  busyMinDurationMs?: number;
-  busyDelayMs?: number;
 }
 
 export const LOADING_DEFUALT_CONFIG: ILoadingConfig = {
-  busyMinDurationMs: 0,
-  busyDelayMs: 0,
   showContent: true,
   animationSpeed: "0.9s",
   theme: {

@@ -3,11 +3,8 @@
  */
 
 export * from "./lib/loading-skeleton.service";
-export * from "./lib/loading-skeleton.component";
 export * from "./lib/loading-skeleton.module";
 export * from "./lib/loading-skeleton.config";
-
-export * from "./lib/loading-skeleton-list/loading-skeleton-list.component";
 
 export * from "./lib/loading-placeholder/loading-placeholder.component";
 

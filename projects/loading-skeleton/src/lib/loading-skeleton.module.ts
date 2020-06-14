@@ -1,7 +1,5 @@
 import { NgModule, ModuleWithProviders } from "@angular/core";
-import { LoadingSkeletonComponent } from "./loading-skeleton.component";
 import { CommonModule } from "@angular/common";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import {
   LOADING_CONFIG_TOKEN,
   LOADING_DEFUALT_CONFIG,
@@ -13,12 +11,9 @@ import { LoadingHeadlineComponent } from "./template-components/loading-headline
 import { LoadingListComponent } from "./template-components/loading-list/loading-list.component";
 import { LoadingTextComponent } from "./template-components/loading-text/loading-text.component";
 import { LoadingBulletComponent } from "./template-components/loading-bullet/loading-bullet.component";
-import { LoadingSkeletonListComponent } from "./loading-skeleton-list/loading-skeleton-list.component";
 
 @NgModule({
   declarations: [
-    LoadingSkeletonListComponent,
-    LoadingSkeletonComponent,
     LoadingPlaceholderComponent,
     LoadingBulletComponent,
     LoadingButtonComponent,
@@ -26,10 +21,8 @@ import { LoadingSkeletonListComponent } from "./loading-skeleton-list/loading-sk
     LoadingListComponent,
     LoadingTextComponent,
   ],
-  imports: [BrowserAnimationsModule, CommonModule],
+  imports: [CommonModule],
   exports: [
-    LoadingSkeletonListComponent,
-    LoadingSkeletonComponent,
     LoadingPlaceholderComponent,
     LoadingBulletComponent,
     LoadingButtonComponent,

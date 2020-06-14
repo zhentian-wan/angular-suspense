@@ -1,6 +1,6 @@
 {
   "name": "ngx-loading-skeleton",
-  "version": "2.0.2",
+  "version": "3.0.0-0",
   "author": {
     "name": "Zhentian Wan",
     "email": "answer881215@gmail.com"
@@ -12,12 +12,9 @@
     "Loading-Skeleton",
     "Content-Skeleton",
     "ngx-skeleton",
-    "ngx-loading-skeleton",
-    "Suspense",
-    "SuspenseList",
-    "ngx-suspense"
+    "ngx-loading-skeleton"
   ],
-  "description": "Angular 9 Component for displaying loading skeleton for the page, customize just by css; React Suspen alike API",
+  "description": "Angular 9 Component for displaying loading skeleton for the page, customize just by css",
   "homepage": "https://github.com/zhentian-wan/angular-suspense/blob/master/projects/loading-skeleton/README.md",
   "peerDependencies": {
     "@angular/common": "^9.1.0",

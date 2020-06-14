@@ -82,3 +82,12 @@
 ## 2.0.2
 
 - Add default config for loading service
+
+# v3.0.0
+
+## Breaking changes
+
+`loading-skeleton` & `loading-skeleton-list` component was removed from the library
+`LoadingSkeletonService` was removed from the library
+
+All above functionalities are added to [ngx-suspense library](https://github.com/zhentian-wan/angular-suspense/tree/master/projects/ngx-suspense)

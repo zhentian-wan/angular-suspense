@@ -16,6 +16,6 @@ Open `localhost:4202` to check the exmaple.
 
 ## Full Docs
 
-### [Ngx-Suspense documentation](./projects/ngx-suspenseREADME.md)
+### [Ngx-Suspense documentation](./projects/ngx-suspense/README.md)
 
 ### [loading skeleton documentation](./projects/loading-skeleton/README.md)

@@ -12,7 +12,7 @@
     "ngx-suspense"
   ],
   "description": "This library is an experimetnal implementation of React Suspense for Angular.",
-  "homepage": "https://github.com/zhentian-wan/ngx-loading-skeleton/blob/master/projects/ngx-suspense/README.md",
+  "homepage": "https://github.com/zhentian-wan/angular-suspense/blob/master/projects/ngx-suspense/README.md",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",

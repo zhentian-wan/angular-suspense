@@ -21,7 +21,11 @@ import {
   takeUntil,
   shareReplay,
 } from "rxjs/operators";
-import { LOADING_CONFIG_TOKEN, ILoadingConfig } from "./ngx-suspense.config";
+import {
+  LOADING_CONFIG_TOKEN,
+  LOADING_DEFUALT_CONFIG,
+  ILoadingConfig,
+} from "./ngx-suspense.config";
 
 @Injectable()
 export class NgxSuspenseService implements OnDestroy {
@@ -45,7 +49,7 @@ export class NgxSuspenseService implements OnDestroy {
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
-    private userConfig: ILoadingConfig
+    private userConfig: ILoadingConfig = LOADING_DEFUALT_CONFIG
   ) {}
 
   ngOnDestroy() {

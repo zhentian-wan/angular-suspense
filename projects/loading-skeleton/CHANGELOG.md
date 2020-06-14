@@ -78,3 +78,7 @@
 ## 2.0.1
 
 - style fix for `loading-headline`
+
+## 2.0.2
+
+- Add default config for loading service

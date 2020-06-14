@@ -26,6 +26,7 @@ import {
   ILoadingConfig,
   ITheme,
   ILoadingConfigTheme,
+  LOADING_DEFUALT_CONFIG,
 } from "./loading-skeleton.config";
 
 @Injectable()
@@ -57,7 +58,7 @@ export class LoadingSkeletonService implements OnDestroy {
   constructor(
     @Optional()
     @Inject(LOADING_CONFIG_TOKEN)
-    private userConfig: ILoadingConfig
+    private userConfig: ILoadingConfig = LOADING_DEFUALT_CONFIG
   ) {}
 
   ngOnDestroy() {

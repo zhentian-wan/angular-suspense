@@ -26,10 +26,10 @@ export class ExperimentalComponent implements OnInit {
   l4;
   model = "*";
   constructor() {
-    this.l1 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
-    this.l2 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
-    this.l3 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
-    this.l4 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
+    this.l1 = new NgxSuspenseService();
+    this.l2 = new NgxSuspenseService();
+    this.l3 = new NgxSuspenseService();
+    this.l4 = new NgxSuspenseService();
   }
 
   ngOnInit(): void {

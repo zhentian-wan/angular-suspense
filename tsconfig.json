@@ -23,6 +23,10 @@
       "ngx-suspense": [
         "dist/ngx-suspense/ngx-suspense",
         "dist/ngx-suspense"
+      ],
+      "ngx-error-boundary": [
+        "dist/ngx-error-boundary/ngx-error-boundary",
+        "dist/ngx-error-boundary"
       ]
     },
     "resolveJsonModule": true

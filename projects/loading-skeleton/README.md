@@ -106,9 +106,3 @@ imports: [
   }),
 ];
 ```
-
-### Recommended
-
-It is recommended to inject `LoadingSkeletonService` for `component` level.
-
-The reason is for each page or feature module, we want difference loading skeleton so that users get unqiue experience when browsering the appliation.

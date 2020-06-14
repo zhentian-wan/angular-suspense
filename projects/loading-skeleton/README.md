@@ -34,78 +34,6 @@ LoadingSkeletonService;
 
 ## Usage
 
-### `<loading-skeleton>`
-
-Using `[fallback]` with `<ng-template></ng-template>`
-
-`<loading-skeleton [fallback]="tempalteRef"><YOUR_CONTENT_FROM_SERVER /></loading-skeleton>` will use the template you passed in.
-
-It using `this.loadingService.showingFor<T>(obs$ : Observable<T>): Observable<T>`, dynamically control `loading-skeleton` component show / hide. It is more reactive approach.
-
-You can also use `this.loadingService.showLoadingStatus()`
-
-```typescript
-@Component({
-  selector: "categories",
-  templateUrl: "./categories.component.html",
-  styleUrls: ["./categories.component.scss"],
-  providers: [LoadingSkeletonService],
-})
-export class CategoriesComponent implements OnInit {
-  categories$: Observable<Category[]>;
-  constructor(
-    private categoriesService: CategoriesService,
-    private loadingService: LoadingSkeletonService
-  ) {
-    // Type safe
-    this.categories$ = this.loadingService.showingFor(
-      this.categoriesService.getCategories()
-    );
-
-    // or
-    // Side effect
-    this.categories$ = this.categoriesService
-      .getCategories()
-      .pipe(this.loadingService.showLoadingStatus());
-  }
-}
-```
-
-```html
-<ng-template #tmp>
-  <loading-headline size="s"></loading-headline>
-  <div class="column">
-    <loading-headline size="m"></loading-headline>
-    <loading-text size="m"></loading-text>
-    <loading-text size="m"></loading-text>
-  </div>
-</ng-template>
-<main>
-  <section>
-    <loading-skeleton [fallback]="tmp">
-      <!-- Your content to be loaded below -->
-      <div *ngIf="categories$ | asnyc as categories"></div>
-    </loading-skeleton>
-  </section>
-</main>
-```
-
-#### `@Input() ariaLabel: string`
-
-Support for `aria-label`, with default settings `aria-busy=true` & `aria-hidden=false`
-
----
-
-### `<loading-skeleton-list>`
-
-Let's say you have two or more `<loading-skeleton>` inside one page.
-
-Each of them resolve in different time, different orders, depends on network speed.
-
-To avoid some part of UI jumping up & down, you can use `<loading-skeleton-list revealOrder="together">` as a parent component to wrap all `<loading-skeleton>`s. Then all `<loading-skeleton>` will resolve at the same time.
-
----
-
 ### `<loading-placeholder>`
 
 This is basic buidling block for all the available components:
@@ -142,52 +70,6 @@ For example:
 
 ### `LoadingSkeletonService`
 
-#### `showingFor<T>(Obs$: Observable<T>): Observable<T>`
-
-You can pass in an observable which will finially complete, `showingFor` will trigger the side effect which control loading spinner ON / OFF. Type friendly approach.
-
-**Example:**
-
-```typescript
-@Component({
-  selector: "categories",
-  templateUrl: "./categories.component.html",
-  styleUrls: ["./categories.component.scss"],
-  providers: [LoadingSkeletonService],
-})
-export class CategoriesComponent implements OnInit {
-  categories$: Observable<Category[]>;
-  constructor(
-    private categoriesService: CategoriesService,
-    private loadingService: LoadingSkeletonService
-  ) {
-    this.categories$ = this.loadingService.showingFor(
-      this.categoriesService.getCategories()
-    );
-  }
-}
-```
-
-#### `showLoadingStatus()`
-
-The same effect with `showingFor()`, just doesn't have type information.
-
-```typescript
-this.categories$ = this.categoriesService
-  .getCategories()
-  .pipe(this.loadingService.showLoadingStatus());
-```
-
-#### `show() / hide()`
-
-If you wish to have normal control flow approach. You can use `show / hide`
-
-```typescript
-this.loadingSerivce.show();
-await this.apiService.load();
-this.loadingService.hide();
-```
-
 #### `changeMode(mode: 'light'|'dark'): void`
 
 #### `changeMode(isDark: boolean ): void`
@@ -204,14 +86,12 @@ this.loadingService.changeMode("light"); // set light mode
 
 ## Configuration
 
-You can set `backgroundColor`, `fontColor`, `busyDelayMs`, `busyMinDurationMs` and `animationSpeed`.
+You can set `backgroundColor`, `fontColor` and `animationSpeed`.
 
 ```typescript
 imports: [
   LoadingSkeletonModule.forRoot({
     animationSpeed: "1.5s", // default: 0.9s
-    busyDelayMs: 300, // within 300ms, don't show the loading skeleton
-    busyMinDurationMs: 700, // showing loading skeleton for at least 700ms
     theme: {
       // the same as default value
       light: {

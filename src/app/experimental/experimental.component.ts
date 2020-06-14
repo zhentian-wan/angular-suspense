@@ -5,13 +5,14 @@ import { mapTo } from "rxjs/operators";
 import { range } from "lodash";
 import { timer } from "rxjs";
 import {
-  LoadingSkeletonService,
+  NgxSuspenseService,
   LOADING_DEFUALT_CONFIG,
-} from "projects/loading-skeleton/src/public-api";
+} from "projects/ngx-suspense/src/projects";
 @Component({
   selector: "app-experimental",
   templateUrl: "./experimental.component.html",
   styleUrls: ["./experimental.component.scss"],
+  providers: [NgxSuspenseService],
 })
 export class ExperimentalComponent implements OnInit {
   dataList1$;
@@ -25,10 +26,10 @@ export class ExperimentalComponent implements OnInit {
   l4;
   model = "*";
   constructor() {
-    this.l1 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
-    this.l2 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
-    this.l3 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
-    this.l4 = new LoadingSkeletonService(LOADING_DEFUALT_CONFIG);
+    this.l1 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
+    this.l2 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
+    this.l3 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
+    this.l4 = new NgxSuspenseService(LOADING_DEFUALT_CONFIG);
   }
 
   ngOnInit(): void {

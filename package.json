@@ -5,8 +5,11 @@
     "ng": "ng",
     "start": "ng serve --port=4202",
     "build": "ng build --project=loading-skeleton --prod",
+    "build:suspense": "ng build --project=ngx-suspense --prod",
     "dev": "ng build --project=loading-skeleton --watch",
+    "dev:suspense": "ng build --project=ngx-suspense --watch",
     "test": "ng test --project=loading-skeleton --watch",
+    "test:suspense": "ng test --project=ngx-suspense --watch",
     "prepare": "npm run build",
     "postpublish": "git push --tags",
     "lint": "ng lint"

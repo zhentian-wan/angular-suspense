@@ -38,8 +38,8 @@
 </p>
 
 <section class="row">
-  <loading-skeleton-list class="flex-9" [revealOrder]="model" #list="list">
-    <loading-skeleton
+  <SuspenseList class="flex-9" [revealOrder]="model" #list="list">
+    <Suspense
       [bind]="l1"
       [fallback]="tpl"
       ariaLabel="Loading the page... please wait"
@@ -60,8 +60,8 @@
           </div>
         </div>
       </section>
-    </loading-skeleton>
-    <loading-skeleton
+    </Suspense>
+    <Suspense
       [bind]="l2"
       [fallback]="tpl"
       ariaLabel="Loading the page... please wait"
@@ -82,8 +82,8 @@
           </div>
         </div>
       </section>
-    </loading-skeleton>
-    <loading-skeleton
+    </Suspense>
+    <Suspense
       [bind]="l3"
       [fallback]="tpl"
       ariaLabel="Loading the page... please wait"
@@ -104,8 +104,8 @@
           </div>
         </div>
       </section>
-    </loading-skeleton>
-    <loading-skeleton
+    </Suspense>
+    <Suspense
       [bind]="l4"
       [fallback]="tpl"
       ariaLabel="Loading the page... please wait"
@@ -126,27 +126,27 @@
           </div>
         </div>
       </section>
-    </loading-skeleton>
-  </loading-skeleton-list>
+    </Suspense>
+  </SuspenseList>
 
   <div class="flex-3">
     <pre>
       <code class="code">
-  &lt;loading-skeleton-list <span class="code_highlight">revealOrder="{{model}}"</span>&gt;
-    <span class="tag">&lt;loading-skeleton
-      [bind]=&quot;loadingService1&quot;
+  &lt;SuspenseList <span class="code_highlight">revealOrder="{{model}}"</span>&gt;
+    <span class="tag">&lt;Suspense
+      [bind]=&quot;suspenseService1&quot;
       [fallback]=&quot;tpl2&quot;
     &gt;</span>
       <span class="black">&lt;YOUR_COMPONENT1 /&gt;</span>
-    <span class="tag">&lt;/loading-skeleton&gt;</span>
+    <span class="tag">&lt;/Suspense&gt;</span>
 
-    <span class="tag">&lt;loading-skeleton
-      [bind]=&quot;loadingService2&quot;
+    <span class="tag">&lt;Suspense
+      [bind]=&quot;suspenseService2&quot;
       [fallback]=&quot;tpl2&quot;
     &gt;</span>
       <span class="black">&lt;YOUR_COMPONENT2 /&gt;</span>
-    <span class="tag">&lt;/loading-skeleton&gt;</span>
-  &lt;/loading-skeleton-list&gt;
+    <span class="tag">&lt;/Suspense&gt;</span>
+  &lt;/SuspenseList&gt;
       </code>
     </pre>
     <p style="text-align: center;">

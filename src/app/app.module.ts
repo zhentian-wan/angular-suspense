@@ -8,6 +8,7 @@ import { NgxLoadingSkeletonModule } from "projects/loading-skeleton/src/public-a
 import { AvailableComponent } from "./available/available.component";
 import { OptimizeComponent } from "./optimize/optimize.component";
 import { ExperimentalComponent } from "./experimental/experimental.component";
+import { NgxSuspenseModule } from "projects/ngx-suspense/src/projects";
 
 @NgModule({
   declarations: [
@@ -26,6 +27,10 @@ import { ExperimentalComponent } from "./experimental/experimental.component";
       { path: "experimental", component: ExperimentalComponent },
     ]),
     NgxLoadingSkeletonModule,
+    NgxSuspenseModule.forRoot({
+      busyDelayMs: 450,
+      busyMinDurationMs: 1300,
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent],

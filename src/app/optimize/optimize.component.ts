@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { timer, of } from "rxjs";
 import { mapTo } from "rxjs/operators";
-import { LoadingSkeletonService } from "projects/loading-skeleton/src/public-api";
+import { NgxSuspenseService } from "projects/ngx-suspense/src/projects";
 
 const mockData = {
   heading: "Demo heading",
@@ -49,13 +49,14 @@ const mockData = {
   selector: "app-optimize",
   templateUrl: "./optimize.component.html",
   styleUrls: ["./optimize.component.scss"],
+  providers: [NgxSuspenseService],
 })
 export class OptimizeComponent implements OnInit {
   data$;
   busyDelayMs;
   busyMinDurationMs;
 
-  constructor(private loadingService: LoadingSkeletonService) {}
+  constructor(private loadingService: NgxSuspenseService) {}
 
   ngOnInit(): void {
     this.busyDelayMs = this.loadingService.config.busyDelayMs;

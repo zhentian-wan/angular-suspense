@@ -11,11 +11,18 @@
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2015",
-    "lib": ["es2018", "dom"],
+    "lib": [
+      "es2018",
+      "dom"
+    ],
     "paths": {
       "loading-skeleton": [
         "dist/loading-skeleton/loading-skeleton",
         "dist/loading-skeleton"
+      ],
+      "ngx-suspense": [
+        "dist/ngx-suspense/ngx-suspense",
+        "dist/ngx-suspense"
       ]
     },
     "resolveJsonModule": true

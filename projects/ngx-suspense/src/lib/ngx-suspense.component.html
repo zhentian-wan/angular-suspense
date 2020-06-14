@@ -1,0 +1,16 @@
+<ng-template #content>
+  <!-- animation doesn't work with ng-template, ng-content or ng-container, have to add extra div for workaround-->
+  <div [@fadeIn]>
+    <ng-content></ng-content>
+  </div>
+</ng-template>
+
+<div
+  *ngIf="(loading$ | async) || isVisible; else content"
+  role="alert"
+  aria-busy="true"
+  aria-hidden="false"
+  [attr.aria-label]="ariaLabel"
+>
+  <ng-container *ngTemplateOutlet="fallback"></ng-container>
+</div>

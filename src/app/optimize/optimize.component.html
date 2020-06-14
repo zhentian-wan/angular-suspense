@@ -18,7 +18,7 @@
 
 <section class="row">
   <div class="flex-8">
-    <loading-skeleton
+    <Suspense
       [fallback]="exampleTpl2"
       ariaLabel="Loading the page... please wait"
     >
@@ -31,7 +31,7 @@
           </div>
         </div>
       </section>
-    </loading-skeleton>
+    </Suspense>
   </div>
   <div class="flex-4">
     <h2>

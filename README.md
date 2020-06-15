@@ -6,12 +6,6 @@
 npm start
 ```
 
-Open another tab:
-
-```bash
-npm run dev
-```
-
 Open `localhost:4202` to check the exmaple.
 
 ## Full Docs

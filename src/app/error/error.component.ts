@@ -40,8 +40,8 @@ export class ErrorComponent implements OnInit {
 
   ngOnInit(): void {
     this.reload();
-    this.innerSuccess();
-    this.outterSuccess();
+    this.innerToggle();
+    this.outterToggle();
   }
 
   reload() {
@@ -58,53 +58,25 @@ export class ErrorComponent implements OnInit {
   }
 
   outterToggle() {
+    this.outter$ = this.errorService.handleExpection(
+      this.outterState
+        ? of("some content for outter container")
+        : throwError("Outter has problem"),
+      "Outter has proble!",
+      "example2"
+    );
     this.outterState = !this.outterState;
-    if (this.outterState) {
-      this.outterSuccess();
-    } else {
-      this.outterFail();
-    }
-  }
-
-  outterSuccess() {
-    this.outter$ = this.errorService.handleExpection(
-      of("some content for outter container"),
-      "Outter has proble!",
-      "example2"
-    );
-  }
-
-  outterFail() {
-    this.outter$ = this.errorService.handleExpection(
-      throwError("Outter has problem"),
-      "Outter has proble!",
-      "example2"
-    );
   }
 
   innerToggle() {
+    this.inner$ = this.errorService.handleExpection(
+      this.innerState
+        ? of("some content for inner container")
+        : throwError("Inner has problem"),
+      "Inner has problem!",
+      "example3"
+    );
     this.innerState = !this.innerState;
-    if (this.innerState) {
-      this.innerSuccess();
-    } else {
-      this.innerFail();
-    }
-  }
-
-  innerSuccess() {
-    this.inner$ = this.errorService.handleExpection(
-      of("some content for inner container"),
-      "Inner has proble!",
-      "example3"
-    );
-  }
-
-  innerFail() {
-    this.inner$ = this.errorService.handleExpection(
-      throwError("Inner has problem"),
-      "Inner has proble!",
-      "example3"
-    );
   }
 
   getSource() {

@@ -1,0 +1,92 @@
+<ng-template #tpl>
+  <loading-headline size="s"></loading-headline>
+  <loading-list count="3" size="l"></loading-list>
+</ng-template>
+
+<ng-template #errTpl let-error>
+  <div class="err-container">
+    <h2>Something goes wrong!</h2>
+    <section>
+      <p [innerHTML]="error.message"></p>
+    </section>
+  </div>
+</ng-template>
+
+<ng-template #errTpl2 let-error>
+  <div class="err-container">
+    <h2>Something goes wrong for outter container!</h2>
+    <section>
+      <p [innerHTML]="error.message"></p>
+    </section>
+  </div>
+</ng-template>
+
+<ng-template #errTpl3 let-error>
+  <div class="err-container">
+    <h2>Something goes wrong for inner container!</h2>
+    <section>
+      <p [innerHTML]="error.message"></p>
+    </section>
+  </div>
+</ng-template>
+
+<h2>Error boundary:</h2>
+
+<p></p>
+
+<section class="row">
+  <div class="flex-3">
+    <p>
+      Fail every second times:
+      <button class="lgf mg10" (click)="reload()">Reload</button>
+    </p>
+  </div>
+  <div class="flex-9">
+    <ErrorBoundary [fallback]="errTpl" key="example">
+      <Suspense [fallback]="tpl">
+        <section class="mg10" *ngIf="dataList$ | async as data">
+          <div class="row">
+            <div class="flex-12">
+              <ul>
+                <li class="listItem" *ngFor="let li of data">
+                  {{ li.content }}
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+      </Suspense>
+    </ErrorBoundary>
+  </div>
+</section>
+
+<hr />
+
+<section class="row">
+  <div class="flex-3">
+    <p>
+      Nested error boundary:
+      <br />
+      <button class="lgf mg10" (click)="outterToggle()">Outter Fail</button>
+      <button class="lgf mg10" (click)="innerToggle()">Inner Fail</button>
+    </p>
+  </div>
+  <div class="flex-9">
+    <ErrorBoundary [fallback]="errTpl2" key="example2">
+      <section class="outter-container">
+        <h3>Outter container</h3>
+        <p>
+          {{ outter$ | async }}
+        </p>
+        <ErrorBoundary [fallback]="errTpl3" key="example3">
+          <section class="inner-container">
+            <h4>Inner container</h4>
+            <p>
+              {{ inner$ | async }}
+            </p>
+          </section>
+        </ErrorBoundary>
+      </section>
+    </ErrorBoundary>
+  </div>
+</section>

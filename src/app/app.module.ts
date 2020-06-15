@@ -9,6 +9,8 @@ import { AvailableComponent } from "./available/available.component";
 import { OptimizeComponent } from "./optimize/optimize.component";
 import { ExperimentalComponent } from "./experimental/experimental.component";
 import { NgxSuspenseModule } from "projects/ngx-suspense/src/projects";
+import { ErrorComponent } from "./error/error.component";
+import { NgxErrorBoundaryModule } from "projects/ngx-error-boundary/src/public-api";
 
 @NgModule({
   declarations: [
@@ -16,6 +18,7 @@ import { NgxSuspenseModule } from "projects/ngx-suspense/src/projects";
     AvailableComponent,
     OptimizeComponent,
     ExperimentalComponent,
+    ErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -24,13 +27,12 @@ import { NgxSuspenseModule } from "projects/ngx-suspense/src/projects";
     RouterModule.forRoot([
       { path: "", component: AvailableComponent },
       { path: "optimize", component: OptimizeComponent },
+      { path: "errorboundary", component: ErrorComponent },
       { path: "experimental", component: ExperimentalComponent },
     ]),
     NgxLoadingSkeletonModule,
-    NgxSuspenseModule.forRoot({
-      busyDelayMs: 450,
-      busyMinDurationMs: 1300,
-    }),
+    NgxSuspenseModule,
+    NgxErrorBoundaryModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

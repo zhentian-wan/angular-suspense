@@ -1,0 +1,30 @@
+.listItem {
+  padding: 12px;
+  margin: 5px;
+  border: 1px solid black;
+}
+.err-container {
+  border: 1px dashed red;
+  padding: 10px;
+
+  & > h2 {
+    color: red;
+  }
+}
+p {
+  max-width: 42em;
+  font-size: 1.35rem;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+}
+.outter-container {
+  border: 2px dashed blue;
+  padding: 20px;
+}
+.inner-container {
+  border: 2px dashed green;
+  padding: 10px;
+}

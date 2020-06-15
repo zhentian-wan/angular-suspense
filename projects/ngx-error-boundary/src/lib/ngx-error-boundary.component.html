@@ -1,0 +1,15 @@
+<ng-container *ngIf="errors$ | async as errors; else content">
+  <ng-container *ngIf="errors[key] as error; else content">
+    <div [ngClass]="{ bounce: isRetrying$ | async }">
+      <ng-container
+        [ngTemplateOutlet]="fallback"
+        [ngTemplateOutletContext]="getContext(error, key)"
+      >
+      </ng-container>
+    </div>
+  </ng-container>
+</ng-container>
+
+<ng-template #content>
+  <ng-content></ng-content>
+</ng-template>

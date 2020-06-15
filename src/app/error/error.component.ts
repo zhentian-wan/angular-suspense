@@ -1,8 +1,15 @@
 import { Component, OnInit } from "@angular/core";
 import { NgxErrorBoundaryService } from "projects/ngx-error-boundary/src/public-api";
 import { NgxSuspenseService } from "projects/ngx-suspense/src/projects";
-import { timer, throwError, of } from "rxjs";
-import { mapTo, mergeMap } from "rxjs/operators";
+import { timer, throwError, of, BehaviorSubject } from "rxjs";
+import {
+  mapTo,
+  mergeMap,
+  tap,
+  scan,
+  startWith,
+  switchMap,
+} from "rxjs/operators";
 
 const mockData = [
   {
@@ -32,7 +39,7 @@ export class ErrorComponent implements OnInit {
   outterState = true;
   inner$;
   innerState = true;
-
+  retry$ = this.retry();
   constructor(
     private suspense: NgxSuspenseService,
     private errorService: NgxErrorBoundaryService
@@ -46,35 +53,65 @@ export class ErrorComponent implements OnInit {
 
   reload() {
     if (this.count % 2 === 0) {
-      this.dataList$ = this.errorService.handleExpection(this.getSource());
+      this.dataList$ = this.getSource().pipe(
+        this.errorService.handleExpection({
+          message: "Cannot load list",
+          key: "example",
+        })
+      );
     } else {
-      this.dataList$ = this.errorService.handleExpection(
-        this.getError(),
-        "Cannot load list",
-        "example"
+      this.dataList$ = this.getError().pipe(
+        this.errorService.handleExpection({
+          message: "Cannot load list",
+          key: "example",
+        })
       );
     }
     this.count++;
   }
 
+  retry() {
+    return timer(500).pipe(
+      switchMap(() => of(this.count++)),
+      mergeMap((x) =>
+        x % 3 !== 0 && x > 0 ? throwError("Oops!") : of("Good")
+      ),
+      this.errorService.handleExpection({
+        message: "Please retry...",
+        key: "example4",
+      })
+    );
+  }
+
+  triggerRetryError() {
+    this.retry$ = this.retry();
+    this.errorService.dismiss("example4");
+  }
+
   outterToggle() {
-    this.outter$ = this.errorService.handleExpection(
-      this.outterState
-        ? of("some content for outter container")
-        : throwError("Outter has problem"),
-      "Outter has proble!",
-      "example2"
+    const source$ = this.outterState
+      ? of("some content for outter container")
+      : throwError("Outter has problem");
+
+    this.outter$ = source$.pipe(
+      this.errorService.handleExpection({
+        message: "Outter has proble!",
+        key: "example2",
+      })
     );
     this.outterState = !this.outterState;
   }
 
   innerToggle() {
-    this.inner$ = this.errorService.handleExpection(
-      this.innerState
-        ? of("some content for inner container")
-        : throwError("Inner has problem"),
-      "Inner has problem!",
-      "example3"
+    const source$ = this.innerState
+      ? of("some content for inner container")
+      : throwError("Inner has problem");
+
+    this.inner$ = source$.pipe(
+      this.errorService.handleExpection({
+        message: "Inner has problem!",
+        key: "example3",
+      })
     );
     this.innerState = !this.innerState;
   }

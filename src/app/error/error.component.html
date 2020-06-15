@@ -30,6 +30,22 @@
   </div>
 </ng-template>
 
+<ng-template #errTpl4 let-error let-retryCtx="retry">
+  <div class="err-container">
+    <h2>Something goes wrong!</h2>
+    <section>
+      <p [innerHTML]="error.message"></p>
+      <button errorRetry>
+        {{
+          retryCtx.isLoading
+            ? "Retrying..."
+            : "Retry (" + retryCtx.current + "/" + retryCtx.max + ")"
+        }})
+      </button>
+    </section>
+  </div>
+</ng-template>
+
 <h2>Error boundary:</h2>
 
 <p></p>
@@ -92,3 +108,23 @@
 </section>
 
 <hr />
+
+<section class="row">
+  <div class="flex-3">
+    <p>
+      Nested error boundary:
+      <br />
+      <button class="lgf mg10" (click)="triggerRetryError()">Reset</button>
+    </p>
+  </div>
+  <div class="flex-9">
+    <ErrorBoundary [fallback]="errTpl4" key="example4">
+      <section class="outter-container">
+        <h3>Retry</h3>
+        <p>
+          {{ retry$ | async }}
+        </p>
+      </section>
+    </ErrorBoundary>
+  </div>
+</section>

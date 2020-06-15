@@ -1,5 +1,11 @@
-import { Injectable } from "@angular/core";
-import { Subject, BehaviorSubject, Observable, throwError } from "rxjs";
+import { Injectable, Optional } from "@angular/core";
+import {
+  Subject,
+  BehaviorSubject,
+  Observable,
+  throwError,
+  Subscriber,
+} from "rxjs";
 import {
   filter,
   retryWhen,
@@ -11,6 +17,11 @@ import {
   takeWhile,
   exhaustMap,
 } from "rxjs/operators";
+
+export interface INgxErrorOption {
+  message?: string;
+  key?: string;
+}
 
 @Injectable({
   providedIn: "root",
@@ -42,7 +53,7 @@ export class NgxErrorBoundaryService {
 
   constructor() {}
 
-  showErrors(
+  private showErrors(
     errors: string | string[],
     key: string = "_$ngx_error_boundary_global_error$_"
   ) {
@@ -52,32 +63,40 @@ export class NgxErrorBoundaryService {
     this.keySubject.next(this.keyStore);
   }
 
-  handleExpection<T>(
-    obs$: Observable<T>,
-    readableMessage?: string,
-    key?: string
-  ): Observable<T> {
-    return obs$.pipe(
-      catchError((err) => {
-        // Catch error every time it emits
-        this.retryStatusSubjet.next("end");
-        const message = readableMessage || JSON.stringify(err);
-        this.showErrors(message, key);
-        return throwError(err);
-      }),
-      //retry max times
-      retryWhen((err) =>
-        err.pipe(
-          exhaustMap(() => this.retryClick$),
-          delay(500),
-          takeWhile((val) => val <= this.retryMaxTimes, true)
-        )
-      ),
-      tap((x) => {
-        // Success
-        this.dismiss(key);
-      })
-    );
+  handleExpection(errorOption: INgxErrorOption) {
+    const { message, key } = errorOption;
+    return (obs$) => {
+      return new Observable((subscriber: Subscriber<any>) => {
+        const sub = obs$
+          .pipe(
+            tap(() => console.log("start")),
+            catchError((err) => {
+              // Catch error every time it emits
+              this.retryStatusSubjet.next("end");
+              const readableMessage = message || JSON.stringify(err);
+              this.showErrors(readableMessage, key);
+              return throwError(err);
+            }),
+            //retry max times
+            retryWhen((err) =>
+              err.pipe(
+                exhaustMap(() => this.retryClick$),
+                delay(500),
+                takeWhile((val) => val <= this.retryMaxTimes, true)
+              )
+            ),
+            tap((x) => {
+              // Success
+              this.dismiss(key);
+            })
+          )
+          .subscribe(subscriber);
+
+        return () => {
+          sub.unsubscribe();
+        };
+      });
+    };
   }
 
   dismiss(key?: string) {

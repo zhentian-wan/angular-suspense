@@ -17,13 +17,13 @@ imports: [NgxLoadingSkeletonModule];
 Once you include the module, you will get following list of components you can use:
 
 ```html
-    <loading-skeleton [fallback]="TempalteRef"></loading-skeleton>
-    <loading-placeholder [size]="s|m|l|f|small|medium|large|full" [type]="text|headline"></loading-placeholde>
-    <loading-text [size]="s|m|l|f|small|medium|large|full"></loading-text>
-    <loading-headline [size]="s|m|l|f|small|medium|large|full">
-    <loading-button>
-    <loading-bullet>
-    <loading-list [count]="number(default 3)" [size]="s|m(default)|l|f|small|medium|large|full" [bullet]="true(default)|false">
+<loading-skeleton [fallback]="TempalteRef"></loading-skeleton>
+<loading-placeholder [size]="s|m|l|f|small|medium|large|full" [type]="text|headline"></loading-placeholde>
+<loading-text [size]="s|m|l|f|small|medium|large|full"></loading-text>
+<loading-headline [size]="s|m|l|f|small|medium|large|full">
+<loading-button>
+<loading-bullet>
+<loading-list [count]="number(default 3)" [size]="s|m(default)|l|f|small|medium|large|full" [bullet]="true(default)|false">
 ```
 
 and also you got one service:
@@ -93,7 +93,6 @@ imports: [
   LoadingSkeletonModule.forRoot({
     animationSpeed: "1.5s", // default: 0.9s
     theme: {
-      // the same as default value
       light: {
         backgroundColor: `rgb(227, 227, 227)`,
         fontColor: `rgba(0, 0, 0, 0.7)`,

@@ -85,6 +85,8 @@ export class CategoriesComponent implements OnInit {
 </main>
 ```
 
+In the example uses [`ngx-loading-skeleton`](../loading-skeleton/README.md) for showing loading shimmer
+
 #### `@Input() ariaLabel: string`
 
 Support for `aria-label`, with default settings `aria-busy=true` & `aria-hidden=false`
@@ -191,8 +193,8 @@ You can set `busyDelayMs` and `busyMinDurationMs`.
 ```typescript
 imports: [
   NgxSuspenseModule.forRoot({
-    busyDelayMs: 300, // within 300ms, don't show the loading skeleton
-    busyMinDurationMs: 700, // showing loading skeleton for at least 700ms
+    busyDelayMs: 300, // within 300ms, don't show the loading skeleton; default value: 0
+    busyMinDurationMs: 700, // showing loading skeleton for at least 700ms; default value: 0
   }),
 ];
 ```

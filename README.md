@@ -18,4 +18,4 @@ Open `localhost:4202` to check the exmaple.
 
 ### [Ngx-Suspense documentation](./projects/ngx-suspense/README.md)
 
-### [loading skeleton documentation](./projects/loading-skeleton/README.md)
+### [Loading skeleton documentation](./projects/loading-skeleton/README.md)

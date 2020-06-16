@@ -1,9 +1,21 @@
 {
   "name": "ngx-error-boundary",
-  "version": "0.0.1",
+  "version": "0.0.2",
+  "author": {
+    "name": "Zhentian Wan",
+    "email": "answer881215@gmail.com"
+  },
+  "keywords": [
+    "Angular",
+    "Error Boundary",
+    "Retry Error"
+  ],
+  "description": "Angular 9 Component for React like Error boundary",
+  "homepage": "https://github.com/zhentian-wan/angular-suspense/blob/master/projects/ngx-error-boundary/README.md",
   "peerDependencies": {
     "@angular/common": "^9.1.0",
     "@angular/core": "^9.1.0",
     "tslib": "^1.10.0"
-  }
+  },
+  "license": "MIT"
 }

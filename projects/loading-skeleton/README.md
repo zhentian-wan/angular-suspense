@@ -1,6 +1,6 @@
 # NgxLoadingSkeleton
 
-## [DEMO](https://codesandbox.io/s/ngx-loading-skeleton-zlcwr)
+## [DEMO](https://codesandbox.io/s/ngx-loading-skeleton-zlcwr?file=/src/app/available/available.component.html)
 
 ## Install the library
 

@@ -10,9 +10,8 @@ Open `localhost:4202` to check the exmaple.
 
 ## Full Docs
 
-### [Ngx-Suspense documentation](./projects/ngx-suspense/README.md)
+### [Ngx-Suspense (v0.0.3) documentation](./projects/ngx-suspense/README.md)
 
-### [WIP: Ngx-Error-Boundary documentation](./projects/ngx-error-boundary)
+### [Ngx-Error-Boundary (v0.0.1) documentation](./projects/ngx-error-boundary)
 
-### [Loading skeleton documentation](./projects/loading-skeleton/README.md)
-
+### [Loading skeleton (v3.0.2) documentation](./projects/loading-skeleton/README.md)

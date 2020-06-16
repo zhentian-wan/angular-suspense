@@ -31,9 +31,9 @@ describe("Error Retry directive", () => {
     component = fixture.componentInstance;
     el = fixture.debugElement;
     fixture.detectChanges();
-    directive = el.query(By.directive(ErrorRetryDirective));
+    directive = el.query(By.directive(NgxErrorRetryDirective));
     directiveCtrl = directive.injector.get(
-      ErrorRetryDirective
+      NgxErrorRetryDirective
     ) as NgxErrorRetryDirective;
     button = el.query(By.css("button"));
     fixture.detectChanges();
@@ -42,10 +42,5 @@ describe("Error Retry directive", () => {
   it("should be defined", () => {
     expect(directive).toBeTruthy();
     expect(directiveCtrl).toBeTruthy();
-  });
-
-  it("should have default Input setup", () => {
-    expect(directiveCtrl.maxRetry).toEqual(3);
-    expect(directiveCtrl.applyStyling).toEqual(true);
   });
 });

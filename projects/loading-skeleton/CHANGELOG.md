@@ -91,3 +91,7 @@
 `LoadingSkeletonService`'s `showingFor` & `showLoadingStatus` was removed from the library
 
 All above functionalities are added to [ngx-suspense library](https://github.com/zhentian-wan/angular-suspense/tree/master/projects/ngx-suspense)
+
+## 3.0.1
+
+- Fix injection

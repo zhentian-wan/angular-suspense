@@ -11,6 +11,7 @@ import { LoadingHeadlineComponent } from "./template-components/loading-headline
 import { LoadingListComponent } from "./template-components/loading-list/loading-list.component";
 import { LoadingTextComponent } from "./template-components/loading-text/loading-text.component";
 import { LoadingBulletComponent } from "./template-components/loading-bullet/loading-bullet.component";
+import { LoadingSkeletonService } from "./loading-skeleton.service";
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { LoadingBulletComponent } from "./template-components/loading-bullet/loa
     LoadingTextComponent,
   ],
   providers: [
+    LoadingSkeletonService,
     {
       provide: LOADING_CONFIG_TOKEN,
       useValue: LOADING_DEFUALT_CONFIG,

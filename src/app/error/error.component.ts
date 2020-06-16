@@ -1,15 +1,8 @@
 import { Component, OnInit } from "@angular/core";
 import { NgxErrorBoundaryService } from "projects/ngx-error-boundary/src/public-api";
 import { NgxSuspenseService } from "projects/ngx-suspense/src/projects";
-import { timer, throwError, of, BehaviorSubject } from "rxjs";
-import {
-  mapTo,
-  mergeMap,
-  tap,
-  scan,
-  startWith,
-  switchMap,
-} from "rxjs/operators";
+import { timer, throwError, of } from "rxjs";
+import { mergeMap, switchMap, tap } from "rxjs/operators";
 
 const mockData = [
   {
@@ -35,11 +28,11 @@ const mockData = [
 export class ErrorComponent implements OnInit {
   dataList$;
   count = 0;
-  outter$;
-  outterState = true;
+  outer$;
+  outerState = true;
   inner$;
   innerState = true;
-  retry$ = this.retry();
+  retry$;
   constructor(
     private suspense: NgxSuspenseService,
     private errorService: NgxErrorBoundaryService
@@ -48,58 +41,40 @@ export class ErrorComponent implements OnInit {
   ngOnInit(): void {
     this.reload();
     this.innerToggle();
-    this.outterToggle();
+    this.outerToggle();
+    this.retry$ = this.retry();
   }
 
   reload() {
-    if (this.count % 2 === 0) {
-      this.dataList$ = this.getSource().pipe(
-        this.errorService.handleExpection({
-          message: "Cannot load list",
-          key: "example",
-        })
-      );
-    } else {
-      this.dataList$ = this.getError().pipe(
-        this.errorService.handleExpection({
-          message: "Cannot load list",
-          key: "example",
-        })
-      );
-    }
-    this.count++;
-  }
-
-  retry() {
-    return timer(500).pipe(
+    this.dataList$ = timer(500).pipe(
       switchMap(() => of(this.count++)),
-      mergeMap((x) =>
-        x % 3 !== 0 && x > 0 ? throwError("Oops!") : of("Good")
-      ),
+      mergeMap((count) => {
+        if (count % 2 === 0) {
+          return of(mockData);
+        } else {
+          return throwError("Oops");
+        }
+      }),
+      this.suspense.showLoadingStatus(),
       this.errorService.handleExpection({
-        message: "Please retry...",
-        key: "example4",
+        message: "Cannot load list",
+        key: "example",
       })
     );
   }
 
-  triggerRetryError() {
-    this.retry$ = this.retry();
-    this.errorService.dismiss("example4");
-  }
+  outerToggle() {
+    const source$ = this.outerState
+      ? of("some content for outer container")
+      : throwError("Outer has problem");
 
-  outterToggle() {
-    const source$ = this.outterState
-      ? of("some content for outter container")
-      : throwError("Outter has problem");
-
-    this.outter$ = source$.pipe(
+    this.outer$ = source$.pipe(
       this.errorService.handleExpection({
-        message: "Outter has proble!",
+        message: "Outer has proble!",
         key: "example2",
       })
     );
-    this.outterState = !this.outterState;
+    this.outerState = !this.outerState;
   }
 
   innerToggle() {
@@ -116,14 +91,21 @@ export class ErrorComponent implements OnInit {
     this.innerState = !this.innerState;
   }
 
-  getSource() {
-    return timer(500).pipe(mapTo(mockData), this.suspense.showLoadingStatus());
+  retry() {
+    return timer(500).pipe(
+      switchMap(() => of(this.count++)),
+      mergeMap((x) =>
+        x % 3 !== 0 || x === 0 ? throwError("Oops!") : of("Good")
+      ),
+      this.errorService.handleExpection({
+        message: "Please retry...",
+        key: "example4",
+      })
+    );
   }
 
-  getError() {
-    return timer(500).pipe(
-      mergeMap(() => throwError("Oops")),
-      this.suspense.showLoadingStatus()
-    );
+  resetRetry() {
+    this.count = 0;
+    this.retry$ = this.retry();
   }
 }

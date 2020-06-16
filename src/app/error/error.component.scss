@@ -20,11 +20,14 @@ p {
   font-style: normal;
   -webkit-font-smoothing: antialiased;
 }
-.outter-container {
+.outer-container {
   border: 2px dashed blue;
   padding: 20px;
 }
 .inner-container {
   border: 2px dashed green;
   padding: 10px;
+}
+button:disabled {
+  color: white;
 }

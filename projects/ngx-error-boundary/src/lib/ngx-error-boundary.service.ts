@@ -1,4 +1,4 @@
-import { Injectable, Optional } from "@angular/core";
+import { Injectable } from "@angular/core";
 import {
   Subject,
   BehaviorSubject,
@@ -12,9 +12,6 @@ import {
   delay,
   catchError,
   tap,
-  scan,
-  mapTo,
-  takeWhile,
   exhaustMap,
 } from "rxjs/operators";
 
@@ -23,9 +20,7 @@ export interface INgxErrorOption {
   key?: string;
 }
 
-@Injectable({
-  providedIn: "root",
-})
+@Injectable()
 export class NgxErrorBoundaryService {
   private errorStore = {};
   private keyStore = {};
@@ -34,14 +29,11 @@ export class NgxErrorBoundaryService {
 
   private retryStatusSubjet = new BehaviorSubject("end");
   retryStatus$ = this.retryStatusSubjet.asObservable();
-  private _retryMaxTimes;
   private retryClickSubject = new Subject();
   retryClick$ = this.retryClickSubject.asObservable().pipe(
     tap(() => {
       this.retryStatusSubjet.next("start");
-    }),
-    mapTo(1),
-    scan((prev, curr) => prev + curr, 0)
+    })
   );
 
   errors$: Observable<{
@@ -63,13 +55,12 @@ export class NgxErrorBoundaryService {
     this.keySubject.next(this.keyStore);
   }
 
-  handleExpection(errorOption: INgxErrorOption) {
+  handleExpection(errorOption: INgxErrorOption = {}) {
     const { message, key } = errorOption;
     return (obs$) => {
       return new Observable((subscriber: Subscriber<any>) => {
         const sub = obs$
           .pipe(
-            tap(() => console.log("start")),
             catchError((err) => {
               // Catch error every time it emits
               this.retryStatusSubjet.next("end");
@@ -81,8 +72,7 @@ export class NgxErrorBoundaryService {
             retryWhen((err) =>
               err.pipe(
                 exhaustMap(() => this.retryClick$),
-                delay(500),
-                takeWhile((val) => val <= this.retryMaxTimes, true)
+                delay(10)
               )
             ),
             tap((x) => {
@@ -115,13 +105,5 @@ export class NgxErrorBoundaryService {
 
   doRetry() {
     this.retryClickSubject.next();
-  }
-
-  set retryMaxTimes(times) {
-    this._retryMaxTimes = times;
-  }
-
-  get retryMaxTimes() {
-    return this._retryMaxTimes;
   }
 }

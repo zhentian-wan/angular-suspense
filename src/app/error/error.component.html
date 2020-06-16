@@ -14,7 +14,7 @@
 
 <ng-template #errTpl2 let-error>
   <div class="err-container">
-    <h2>Something goes wrong for outter container!</h2>
+    <h2>Something goes wrong for outer container!</h2>
     <section>
       <p [innerHTML]="error.message"></p>
     </section>
@@ -30,25 +30,21 @@
   </div>
 </ng-template>
 
-<ng-template #errTpl4 let-error let-retryCtx="retry">
+<ng-template #errTpl4 let-error let-retry$="retry$">
   <div class="err-container">
     <h2>Something goes wrong!</h2>
     <section>
+      <p>success on every 3rd try</p>
       <p [innerHTML]="error.message"></p>
       <button errorRetry>
-        {{
-          retryCtx.isLoading
-            ? "Retrying..."
-            : "Retry (" + retryCtx.current + "/" + retryCtx.max + ")"
-        }})
+        {{ (retry$ | async) ? "Retrying..." : "Retry" }}
       </button>
+      <button [errorDismiss]="error.key">Dismiss</button>
     </section>
   </div>
 </ng-template>
 
-<h2>Error boundary:</h2>
-
-<p></p>
+<h2>Error boundary</h2>
 
 <section class="row">
   <div class="flex-3">
@@ -83,16 +79,16 @@
     <p>
       Nested error boundary:
       <br />
-      <button class="lgf mg10" (click)="outterToggle()">Outter Fail</button>
       <button class="lgf mg10" (click)="innerToggle()">Inner Fail</button>
+      <button class="lgf mg10" (click)="outerToggle()">Outer Fail</button>
     </p>
   </div>
   <div class="flex-9">
     <ErrorBoundary [fallback]="errTpl2" key="example2">
-      <section class="outter-container">
-        <h3>Outter container</h3>
+      <section class="outer-container">
+        <h3>Outer container</h3>
         <p>
-          {{ outter$ | async }}
+          {{ outer$ | async }}
         </p>
         <ErrorBoundary [fallback]="errTpl3" key="example3">
           <section class="inner-container">
@@ -112,14 +108,14 @@
 <section class="row">
   <div class="flex-3">
     <p>
-      Nested error boundary:
+      Using <code>errorRetry</code> & <code>errorDismiss</code> directive:
       <br />
-      <button class="lgf mg10" (click)="triggerRetryError()">Reset</button>
+      <button class="lgf mg10" (click)="resetRetry()">Reset</button>
     </p>
   </div>
   <div class="flex-9">
     <ErrorBoundary [fallback]="errTpl4" key="example4">
-      <section class="outter-container">
+      <section class="outer-container">
         <h3>Retry</h3>
         <p>
           {{ retry$ | async }}

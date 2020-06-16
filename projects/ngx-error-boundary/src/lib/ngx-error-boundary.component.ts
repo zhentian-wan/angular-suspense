@@ -12,16 +12,13 @@ import { map } from "rxjs/operators";
 @Component({
   selector: "ErrorBoundary",
   templateUrl: "./ngx-error-boundary.component.html",
-  styleUrls: ["./ngx-error-boundary.component.scss"],
 })
 export class NgxErrorBoundaryComponent implements OnInit, OnDestroy {
   @Input() fallback: TemplateRef<any>;
   @Input() key: string = "_$ngx_error_boundary_global_error$_";
 
   private sub: Subscription;
-  current: number = 0;
   errors$: Observable<{ [key: string]: string }>;
-  isLoading: boolean;
   isRetrying$: Observable<boolean>;
   constructor(private errorService: NgxErrorBoundaryService) {}
 
@@ -33,18 +30,8 @@ export class NgxErrorBoundaryComponent implements OnInit, OnDestroy {
 
     this.isRetrying$ = this.errorService.retryStatus$.pipe(
       map((status) => {
-        if (status === "end") {
-          this.isLoading = false;
-          return false;
-        } else {
-          this.isLoading = true;
-          return true;
-        }
+        return status !== "end";
       })
-    );
-
-    this.sub = this.errorService.retryClick$.subscribe(
-      (val) => (this.current = val)
     );
   }
 
@@ -62,18 +49,12 @@ export class NgxErrorBoundaryComponent implements OnInit, OnDestroy {
   }
 
   getContext(error, key) {
-    const max = this.errorService.retryMaxTimes || 3;
-
     return {
       $implicit: {
         message: error,
         key,
       },
-      retry: {
-        max,
-        current: this.current,
-        isLoading: this.isLoading,
-      },
+      retry$: this.isRetrying$,
     };
   }
 }

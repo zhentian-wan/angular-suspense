@@ -8,8 +8,14 @@ import {
   OnDestroy,
 } from "@angular/core";
 import { NgxSuspenseComponent } from "./ngx-suspense.component";
-import { combineLatest, Subscription } from "rxjs";
-import { filter, skip, pairwise } from "rxjs/operators";
+import {
+  combineLatest,
+  Subscription,
+  Subject,
+  BehaviorSubject,
+  Observable,
+} from "rxjs";
+import { filter, skip, pairwise, tap, startWith } from "rxjs/operators";
 
 type ORDERS = "*" | "together" | "forwards" | "backwards";
 
@@ -23,11 +29,26 @@ export class NgxSuspenseListComponent implements AfterContentInit, OnDestroy {
   @ContentChildren(NgxSuspenseComponent) skeletons: QueryList<
     NgxSuspenseComponent
   >;
+  @ContentChildren(NgxSuspenseListComponent) list: QueryList<
+    NgxSuspenseListComponent
+  >;
+  loading$: Observable<boolean>;
   subs: Array<Subscription> = [];
   allBroadcasters = [];
   allListeners = [];
 
-  ngOnInit() {}
+  private hasParentControlSubject = new BehaviorSubject(undefined);
+  private parentControl$ = this.hasParentControlSubject.asObservable();
+
+  ngOnInit() {
+    this.parentControl$
+      .pipe(
+        tap((val) => {
+          console.log("release", val);
+        })
+      )
+      .subscribe();
+  }
 
   ngAfterContentInit() {
     this.allBroadcasters = this.skeletons.map((s) => s.loading$);
@@ -51,6 +72,10 @@ export class NgxSuspenseListComponent implements AfterContentInit, OnDestroy {
   reload(order) {
     this.revealOrderOperator(order || this.revealOrder);
   }
+
+  show() {}
+
+  hide() {}
 
   private revealOrderOperator(order: ORDERS) {
     if (this.allBroadcasters.length === 0 || this.allListeners.length === 0) {
@@ -89,13 +114,17 @@ export class NgxSuspenseListComponent implements AfterContentInit, OnDestroy {
     }
   }
 
-  private hideSkeletonListener(skeleton: NgxSuspenseComponent) {
+  private hideSkeletonListener(
+    skeleton: NgxSuspenseComponent | NgxSuspenseListComponent
+  ) {
     return () => {
       skeleton.hide();
     };
   }
 
-  private showSkeletonListener(skeleton: NgxSuspenseComponent) {
+  private showSkeletonListener(
+    skeleton: NgxSuspenseComponent | NgxSuspenseListComponent
+  ) {
     return () => {
       skeleton.show();
     };

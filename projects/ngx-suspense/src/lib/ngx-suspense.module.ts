@@ -1,4 +1,8 @@
-import { NgModule, ModuleWithProviders } from "@angular/core";
+import {
+  NgModule,
+  ModuleWithProviders,
+  CUSTOM_ELEMENTS_SCHEMA,
+} from "@angular/core";
 import { NgxSuspenseComponent } from "./ngx-suspense.component";
 import {
   LOADING_CONFIG_TOKEN,
@@ -18,6 +22,7 @@ import { NgxSuspenseListComponent } from "./ngx-suspense-list.component";
       useValue: LOADING_DEFUALT_CONFIG,
     },
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   exports: [NgxSuspenseComponent, NgxSuspenseListComponent],
 })
 export class NgxSuspenseModule {

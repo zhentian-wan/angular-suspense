@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import {
   Subject,
   BehaviorSubject,
@@ -14,6 +14,7 @@ import {
   tap,
   exhaustMap,
 } from "rxjs/operators";
+import { GLOBAL_KEY } from "./ngx-error-boundary.token";
 
 export interface INgxErrorOption {
   message?: string;
@@ -43,13 +44,12 @@ export class NgxErrorBoundaryService {
     [key: string]: boolean;
   }> = this.keySubject.asObservable().pipe(filter((key) => !!key));
 
-  constructor() {}
+  constructor(@Inject(GLOBAL_KEY) private token: string) {}
 
-  private showErrors(
-    errors: string | string[],
-    key: string = "_$ngx_error_boundary_global_error$_"
-  ) {
-    this.errorStore = Object.assign({}, this.errorStore, { [key]: errors });
+  private showErrors(errors: string | string[], key: string = this.token) {
+    this.errorStore = Object.assign({}, this.errorStore, {
+      [key]: errors,
+    });
     this.keyStore = Object.assign({}, this.keyStore, { [key]: true });
     this.errorsSubject.next(this.errorStore);
     this.keySubject.next(this.keyStore);

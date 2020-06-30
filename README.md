@@ -14,4 +14,4 @@ Open `localhost:4202` to check the exmaple.
 
 ### [Ngx-Error-Boundary (v0.0.3) documentation](./projects/ngx-error-boundary)
 
-### [Loading skeleton (v3.0.2) documentation](./projects/loading-skeleton/README.md)
+### [Loading skeleton (v3.0.3) documentation](./projects/loading-skeleton/README.md)

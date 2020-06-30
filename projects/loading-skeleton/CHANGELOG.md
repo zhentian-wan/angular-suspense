@@ -96,6 +96,6 @@ All above functionalities are added to [ngx-suspense library](https://github.com
 
 - Fix injection
 
-## 3.0.3
+## 3.0.2
 
 - Fix component level `mode` switch doesn't work

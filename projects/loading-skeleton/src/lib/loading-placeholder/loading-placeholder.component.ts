@@ -5,9 +5,11 @@ import {
   ElementRef,
   AfterViewInit,
   ViewEncapsulation,
+  OnDestroy,
 } from "@angular/core";
 import { LoadingSkeletonService } from "../loading-skeleton.service";
 import { ITheme } from "../loading-skeleton.config";
+import { combineLatest, Subscription } from "rxjs";
 
 @Component({
   selector: "loading-placeholder",
@@ -15,7 +17,8 @@ import { ITheme } from "../loading-skeleton.config";
   styleUrls: ["./loading-placeholder.component.scss"],
   encapsulation: ViewEncapsulation.ShadowDom,
 })
-export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
+export class LoadingPlaceholderComponent
+  implements OnInit, OnDestroy, AfterViewInit {
   @Input() type: string;
   @Input() size: string;
   @Input() theme: ITheme;
@@ -24,6 +27,9 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
   extraClass: string;
   backgroundColor: string;
   fontColor: string;
+
+  private subs: Subscription[] = [];
+
   constructor(
     private el: ElementRef,
     public loadingService: LoadingSkeletonService
@@ -31,33 +37,34 @@ export class LoadingPlaceholderComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.extraClass = this.getType();
-    //TODO: combine theme$ and mode$
 
-    this.loadingService.theme$.subscribe(({ backgroundColor, fontColor }) => {
-      this.backgroundColor =
-        this.theme && this.hasProp(this.theme[this.mode], "backgroundColor")
-          ? `${this.theme[this.mode].backgroundColor}`
-          : `${backgroundColor}`;
-      this.fontColor =
-        this.theme && this.hasProp(this.theme[this.mode], "fontColor")
-          ? `${this.theme[this.mode].fontColor}`
-          : `${fontColor}`;
+    const sub = combineLatest([
+      this.loadingService.theme$,
+      this.loadingService.mode$,
+    ]).subscribe(() => {
+      this.updateThemeMode();
     });
+
+    this.subs.push(sub);
+  }
+
+  updateThemeMode() {
+    const theme = this.theme || this.loadingService.theme;
+    const mode = this.mode || this.loadingService.mode;
+    this.backgroundColor = `${theme[mode].backgroundColor}`;
+    this.fontColor = `${theme[mode].fontColor}`;
   }
 
   ngOnChanges(changes) {
     if (changes.mode) {
-      this.backgroundColor =
-        this.theme &&
-        this.hasProp(this.theme[changes.mode.currentValue], "backgroundColor")
-          ? `${this.theme[changes.mode.currentValue].backgroundColor}`
-          : null;
-      this.fontColor =
-        this.theme &&
-        this.hasProp(this.theme[changes.mode.currentValue], "fontColor")
-          ? `${this.theme[changes.mode.currentValue].fontColor}`
-          : null;
+      this.updateThemeMode();
     }
+  }
+
+  ngOnDestroy() {
+    this.subs.forEach((sub) => {
+      sub.unsubscribe();
+    });
   }
 
   ngAfterViewInit() {

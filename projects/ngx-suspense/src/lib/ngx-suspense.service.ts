@@ -133,14 +133,15 @@ export class NgxSuspenseService implements OnDestroy {
         return taskEndFirst === 1 && timerEndFirst === -1;
       })
     );
-    const hideSpinner = merge(
+    const shouldHideSpinner = merge(
       // case 1: should not show spinner at all
       shouldNotShowSpinner,
       // case 2: task end, but wait until min duration timer ends
       combineLatest([hideSpinnerUntilMinDurationEnd, emitOnMinDurationEnd]),
       // case 3: task takes a long time, wait unitl its end
       hideSpinnerAfterTimerAndTaskEnd
-    ).pipe(
+    );
+    const hideSpinner = shouldHideSpinner.pipe(
       tap(() => {
         this.hide();
       })

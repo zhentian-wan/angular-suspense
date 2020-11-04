@@ -162,7 +162,7 @@ this.suspenseService.hide();
 
 You can set `busyDelayMs` and `busyMinDurationMs`.
 
-```typescript
+```diff
 imports: [
   NgxSuspenseModule.forRoot({
     // within 300ms, don't show the loading skeleton; default value: 0

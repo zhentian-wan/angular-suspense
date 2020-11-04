@@ -1,4 +1,4 @@
-# NgxSuspense
+# NgxSuspense 🔥
 
 This library is an experimental implementation of React Suspense for Angular.
 

@@ -97,7 +97,7 @@ Let's say you have two or more `<Suspense>` inside one page.
 
 Each of them resolve in different time, different orders, depends on network speed.
 
-To avoid some part of UI jumping up & down, you can use `<SuspenseList revealOrder="together">` as a parent component to wrap all `<Suspense>`s. Then all `<Suspense>` will resolve at the same time.
+To avoid some part of UI jumping up & down, you can use `<SuspenseList revealOrder="together | forward | backward">` as a parent component to wrap all `<Suspense>`s. Then all `<Suspense>` will resolve at the same time.
 
 ```html
 <SuspenseList revealOrder="together">

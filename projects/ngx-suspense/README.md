@@ -8,7 +8,7 @@ This library is an experimental implementation of React Suspense for Angular.
 
 NgxSuspense allows to provide a consistent way for loading experience. Similar as `useTransition` hook in React. You can provide custom configuration to fine tuning loading experience.
 
-## Install the library
+## Install the library 🧪
 
 ```bash
 npm i ngx-suspense --save

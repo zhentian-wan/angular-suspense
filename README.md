@@ -1,4 +1,4 @@
-# Angular Suspense + Error boundary + loading skeleton
+# Angular Suspense 🚥 + Error boundary 📦 + loading skeleton ⚡
 
 ## Running the example
 
@@ -8,7 +8,7 @@ npm start
 
 Open `localhost:4202` to check the exmaple.
 
-## Full Docs
+## Full Docs 📚
 
 ### [Ngx-Suspense (v0.0.4) documentation](./projects/ngx-suspense/README.md)
 

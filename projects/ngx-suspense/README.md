@@ -2,7 +2,11 @@
 
 This library is an experimental implementation of React Suspense for Angular.
 
-## [DEMO](https://codesandbox.io/s/ngx-suspense-dgjhh)
+## [DEMO 📽️](https://codesandbox.io/s/ngx-suspense-dgjhh)
+
+## Motivation 💥
+
+NgxSuspense allows to provide a consistent way for loading experience. Similar as `useTransition` hook in React. You can provide custom configuration to fine tuning loading experience.
 
 ## Install the library
 
@@ -29,7 +33,7 @@ and also you got one service:
 NgxSuspenseService;
 ```
 
-## Usage
+## Features 🔥
 
 ### `<Suspense>`
 
@@ -52,12 +56,6 @@ export class CategoriesComponent implements OnInit {
     private categoriesService: CategoriesService,
     private suspenseService: NgxSuspenseService
   ) {
-    // Type safe
-    this.categories$ = this.suspenseService.showingFor(
-      this.categoriesService.getCategories()
-    );
-
-    // or
     // Side effect
     this.categories$ = this.categoriesService
       .getCategories()
@@ -168,7 +166,7 @@ export class CategoriesComponent implements OnInit {
 
 #### `showLoadingStatus()`
 
-The same effect with `showingFor()`, just doesn't have type information.
+You can pass in an observable which will finially complete, `showLoadingStatus` will trigger the side effect which control loading spinner ON / OFF. Type friendly approach.
 
 ```typescript
 this.categories$ = this.categoriesService

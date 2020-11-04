@@ -138,32 +138,6 @@ class YOUR_SMART_COMPONENT {
 
 ### `NgxSuspenseService`
 
-#### `showingFor<T>(Obs$: Observable<T>): Observable<T>`
-
-You can pass in an observable which will finially complete, `showingFor` will trigger the side effect which control loading spinner ON / OFF. Type friendly approach.
-
-**Example:**
-
-```typescript
-@Component({
-  selector: "categories",
-  templateUrl: "./categories.component.html",
-  styleUrls: ["./categories.component.scss"],
-  providers: [NgxSuspenseService],
-})
-export class CategoriesComponent implements OnInit {
-  categories$: Observable<Category[]>;
-  constructor(
-    private categoriesService: CategoriesService,
-    private suspenseService: NgxSuspenseService
-  ) {
-    this.categories$ = this.suspenseService.showingFor(
-      this.categoriesService.getCategories()
-    );
-  }
-}
-```
-
 #### `showLoadingStatus()`
 
 You can pass in an observable which will finially complete, `showLoadingStatus` will trigger the side effect which control loading spinner ON / OFF. Type friendly approach.

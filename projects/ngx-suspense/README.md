@@ -166,9 +166,9 @@ You can set `busyDelayMs` and `busyMinDurationMs`.
 imports: [
   NgxSuspenseModule.forRoot({
     // within 300ms, don't show the loading skeleton; default value: 0
-  + busyDelayMs: 300,
-  // showing loading skeleton for at least 700ms; default value: 0
-  + busyMinDurationMs: 700
++   busyDelayMs: 300,
+    // showing loading skeleton for at least 700ms; default value: 0
++   busyMinDurationMs: 700
   }),
 ];
 ```

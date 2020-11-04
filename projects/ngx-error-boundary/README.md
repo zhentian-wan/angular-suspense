@@ -1,10 +1,14 @@
-# NgxErrorBoundary
+# NgxErrorBoundary ✨
 
 This library is an experimental implementation of React Error boundary for Angular.
 
-# [DEMO](https://codesandbox.io/s/ngx-error-boundary-zu61y?fontsize=14&hidenavigation=1&theme=dark)
+# [DEMO 📽️](https://codesandbox.io/s/ngx-error-boundary-zu61y?fontsize=14&hidenavigation=1&theme=dark)
 
-## Install the library
+## Motivation 💥
+
+NgxErrorBoundary allows to do retry network request easily and allow nested Error boundary.
+
+## Install the library 🧪
 
 ```bash
 npm i ngx-error-boundary --save
@@ -38,7 +42,7 @@ and also you got one service:
 NgxErrorBoundaryService;
 ```
 
-## Usage
+## Features 🔥
 
 ### `<ErrorBoundary>`
 

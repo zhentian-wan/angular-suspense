@@ -1,8 +1,12 @@
-# NgxLoadingSkeleton
+# NgxLoadingSkeleton ✨
 
-## [DEMO](https://codesandbox.io/s/ngx-loading-skeleton-zlcwr?file=/src/app/available/available.component.html)
+## [DEMO 📽️](https://codesandbox.io/s/ngx-loading-skeleton-zlcwr?file=/src/app/available/available.component.html)
 
-## Install the library
+## Motivation 💥
+
+NgxLoadingSkeleton allows to create custom loading skeleton easily by just using **css**.
+
+## Install the library 🧪
 
 ```bash
 npm i ngx-loading-skeleton --save
@@ -32,7 +36,7 @@ and also you got one service:
 LoadingSkeletonService;
 ```
 
-## Usage
+## Features 🔥
 
 ### `<loading-placeholder>`
 
@@ -84,7 +88,7 @@ this.loadingService.changeMode(!isDark); // set light mode
 this.loadingService.changeMode("light"); // set light mode
 ```
 
-## Configuration
+## Configuration 📚
 
 You can set `backgroundColor`, `fontColor` and `animationSpeed`.
 

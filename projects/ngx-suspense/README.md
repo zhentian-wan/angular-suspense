@@ -1,4 +1,4 @@
-# NgxSuspense 🔥
+# NgxSuspense ✨
 
 This library is an experimental implementation of React Suspense for Angular.
 
@@ -162,7 +162,7 @@ await this.apiService.load();
 this.suspenseService.hide();
 ```
 
-## Configuration
+## Configuration 📚
 
 You can set `busyDelayMs` and `busyMinDurationMs`.
 
